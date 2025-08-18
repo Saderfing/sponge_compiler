@@ -57,7 +57,7 @@ program:%empty					{$$ = NULL;}
 	|program expr SEMICOLON		{addChildASTNode(root, $2);}
 	;
 
-/* // bool_expr:
+// bool_expr:
 // 	|expr PR_EQ expr			{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}
 // 	|expr PR_GT expr			{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}
 // 	|expr PR_GE expr			{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}
@@ -69,7 +69,7 @@ program:%empty					{$$ = NULL;}
 // 	|expr PB_OR expr			{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}
 // 	|PB_NOT bool_expr			{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $2);}
 // 	|PB_NOT expr				{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $2);}
-// 	; */
+// 	;
 
 expr:
 	 IDT PO_AFF expr			{$$ = $2; addChildASTNode($$,  newASTVariable($1)); appendHashMap($1, currentSymboleTable->length, currentSymboleTable); addChildASTNode($$, $3);}

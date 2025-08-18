@@ -60,3 +60,6 @@ dkms.conf
 *.gv
 *.py
 *.pdf
+gen/
+*.sh
+bin/
