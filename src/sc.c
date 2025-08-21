@@ -20,7 +20,11 @@ int main(int argc, char *argv[]){
 	ASTNode *root = newASTSymbolesTable(currentSymTab);
 
 	u32 parseCode = yyparse(root, currentSymTab);
-	// printf("\nExiting with code : %d\n", parseCode);
+	if (parseCode != 0){
+		fatalError("Parsing failed", parseCode);
+	}
+	
+	printAST(root);
 
 	selectOptimization(root);
 
