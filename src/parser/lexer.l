@@ -10,9 +10,24 @@
 
 DIGIT [0-9]
 
+%x COMMENTS
+%x MULTILINE_COMMENTS
+
 %%
 
+"//"	{BEGIN(COMMENTS);}
+<COMMENTS>[^\n]*	{/* skip */}
+<COMMENTS>\n	{BEGIN(INITIAL);}
+
+
+"/*"	{BEGIN(MULTILINE_COMMENTS);}
+<MULTILINE_COMMENTS>"*/"	{BEGIN(INITIAL);}
+<MULTILINE_COMMENTS>\n	{yylineno++;}
+<MULTILINE_COMMENTS>.	{/* skip */}
+
+
 -?[0-9]+	{yylval.node = newASTConstant(strtoul(yytext, NULL, 0)); return CST;}
+ 
 
 "="			{yylval.node = newASTOperator(SO_AFF); return PO_AFF;}
 "+"			{yylval.node = newASTOperator(SO_ADD); return PO_ADD;}
