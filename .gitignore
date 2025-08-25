@@ -63,4 +63,4 @@ dkms.conf
 gen/
 *.sh
 bin/
-.dot
+*.dot
