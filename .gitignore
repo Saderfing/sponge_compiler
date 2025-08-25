@@ -65,3 +65,7 @@ gen/
 bin/
 *.dot
 a.c
+lexer.c
+lexer.h
+parser.c
+parser.h
