@@ -64,3 +64,4 @@ gen/
 *.sh
 bin/
 *.dot
+a.c
