@@ -102,12 +102,9 @@ void printNodeType(NodeType op){
 
 void printASTNode(ASTNode *node){
 	if (!node){
-		// printf("()");
 		return;
 	}
-	// printf("{");
-	// printNodeType(node->nodeType);
-	// printf(" ");
+
 	switch (node->nodeType){
 	case ST_VAR:
 		if (node->data.variable.name){
@@ -133,7 +130,6 @@ void printASTNode(ASTNode *node){
 		printf("Unknown value");
 		break;
 	}
-	// printf("}");
 }
 
 void printAST(ASTNode *root){
@@ -141,7 +137,6 @@ void printAST(ASTNode *root){
 		return;
 	}
 	
-	// printf("(");
 	for (uint64_t i = 0; i < root->childCount / 2; i++){
 		printAST(root->child[i]);
 		if (root->nodeType == ST_CTX){

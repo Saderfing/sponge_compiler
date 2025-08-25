@@ -91,9 +91,7 @@ extern int yydebug;
     PB_NOT = 272,                  /* PB_NOT  */
     SEMICOLON = 273,               /* SEMICOLON  */
     LB = 274,                      /* LB  */
-    RB = 275,                      /* RB  */
-    PO_AND = 276,                  /* PO_AND  */
-    PO_OR = 277                    /* PO_OR  */
+    RB = 275                       /* RB  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -110,7 +108,7 @@ union YYSTYPE
 
 	ASTNode *node;
 
-#line 114 "src/parser/parser.h"
+#line 112 "src/parser/parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

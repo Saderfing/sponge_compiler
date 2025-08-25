@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "sponge_std.h"
 
+// Sponge Operators
 typedef enum {
 	SO_ADD,
 	SO_SUB,
@@ -20,12 +21,10 @@ typedef enum {
 	SO_GE,
 	SO_LE,
 
-	SB_AND,
-	SB_OR,
-	SB_NOT,
-	
-	SO_ROOT,
-	SO_EXPR,
+	SO_AND,
+	SO_OR,
+	SO_NOT,
+
 	SO_UNKOWN,
 	SO_OPERATOR_COUNT
 } Operator;

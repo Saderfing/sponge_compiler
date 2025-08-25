@@ -26,9 +26,9 @@ DIGIT [0-9]
 "<"			{yylval.node = newASTOperator(SO_LT);  return PR_LT;}
 ">"			{yylval.node = newASTOperator(SO_GT);  return PR_GT;}
 
-"and"|"&&"	{yylval.node = newASTOperator(SB_AND); return PB_AND;}
-"or"|"||"	{yylval.node = newASTOperator(SB_OR);  return PB_OR; }
-"not"|"!"	{yylval.node = newASTOperator(SB_NOT); return PB_NOT;}
+"and"|"&&"	{yylval.node = newASTOperator(SO_AND); return PB_AND;}
+"or"|"||"	{yylval.node = newASTOperator(SO_OR);  return PB_OR; }
+"not"|"!"	{yylval.node = newASTOperator(SO_NOT); return PB_NOT;}
 
 
 ";"			{return SEMICOLON;}

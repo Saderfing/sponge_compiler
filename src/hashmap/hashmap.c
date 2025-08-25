@@ -82,7 +82,7 @@ void popHashMap(char *key, HashMap *hm){
 
 void printHashMap(HashMap* hm){
 	if (hm == NULL || hm->length == 0){
-		printf("EMpty HashMap\n");
+		printf("Empty HashMap\n");
 		return;
 	}
 

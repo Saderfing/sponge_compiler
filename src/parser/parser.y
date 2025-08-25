@@ -38,12 +38,12 @@
 
 
 %precedence PO_AFF
-%left PO_AND PO_OR
+%left PB_AND PB_OR
 %precedence PB_NOT
 %left PO_ADD PO_SUB
 %left PO_MUL PO_DIV
 
-%nterm <node> expr program bool_expr program
+%nterm <node> expr program bool_expr
 
 %printer { fprintf(yyo, "%s", $$); } <identifier>
 %printer { printASTNode($$); } <node>
@@ -53,23 +53,21 @@
 %parse-param {ASTNode *root} {HashMap *currentSymboleTable}
 %%
 
-program:%empty					{$$ = NULL;}
-	|program expr SEMICOLON		{addChildASTNode(root, $2);}
+program:%empty						{$$ = NULL;}
+	|program expr SEMICOLON			{addChildASTNode(root, $2);}
+	|program bool_expr SEMICOLON	{addChildASTNode(root, $2);}
 	;
 
-// bool_expr:
-// 	|expr PR_EQ expr			{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}
-// 	|expr PR_GT expr			{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}
-// 	|expr PR_GE expr			{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}
-// 	|expr PR_LT expr			{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}
-// 	|expr PR_LE expr			{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}
-// 	|bool_expr PB_AND bool_expr	{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}
-// 	|bool_expr PB_OR bool_expr	{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}
-// 	|expr PB_AND expr			{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}
-// 	|expr PB_OR expr			{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}
-// 	|PB_NOT bool_expr			{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $2);}
-// 	|PB_NOT expr				{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $2);}
-// 	;
+bool_expr:
+	 expr PR_EQ expr			{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}
+	|expr PR_GT expr			{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}
+	|expr PR_GE expr			{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}
+	|expr PR_LT expr			{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}
+	|expr PR_LE expr			{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}
+	|bool_expr PB_AND bool_expr	{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}
+	|bool_expr PB_OR bool_expr	{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}
+	|PB_NOT bool_expr			{$$ = $2; addChildASTNode($$, $2);}
+	;
 
 expr:
 	 IDT PO_AFF expr			{$$ = $2; addChildASTNode($$,  newASTVariable($1)); appendHashMap($1, currentSymboleTable->length, currentSymboleTable); addChildASTNode($$, $3);}

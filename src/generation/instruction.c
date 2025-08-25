@@ -29,8 +29,6 @@ Instruction newInstruction(InstructionName name, Variable dest, Variable arg0, V
 	return inst;
 }
 
-Instruction 
-
 void printInstruction(Instruction inst){
-	printf("%s %s %s %s\n", inst.instr, inst.dest.name, inst.arg0.name, inst.arg1.name);
+	printf("%u %s %s %s\n", inst.instr, inst.dest.name, inst.arg0.name, inst.arg1.name);
 }

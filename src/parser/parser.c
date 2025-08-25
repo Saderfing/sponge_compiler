@@ -123,11 +123,10 @@ enum yysymbol_kind_t
   YYSYMBOL_SEMICOLON = 18,                 /* SEMICOLON  */
   YYSYMBOL_LB = 19,                        /* LB  */
   YYSYMBOL_RB = 20,                        /* RB  */
-  YYSYMBOL_PO_AND = 21,                    /* PO_AND  */
-  YYSYMBOL_PO_OR = 22,                     /* PO_OR  */
-  YYSYMBOL_YYACCEPT = 23,                  /* $accept  */
-  YYSYMBOL_program = 24,                   /* program  */
-  YYSYMBOL_expr = 25                       /* expr  */
+  YYSYMBOL_YYACCEPT = 21,                  /* $accept  */
+  YYSYMBOL_program = 22,                   /* program  */
+  YYSYMBOL_bool_expr = 23,                 /* bool_expr  */
+  YYSYMBOL_expr = 24                       /* expr  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -455,19 +454,19 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   31
+#define YYLAST   76
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  23
+#define YYNTOKENS  21
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  3
+#define YYNNTS  4
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  11
+#define YYNRULES  20
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  20
+#define YYNSTATES  39
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   277
+#define YYMAXUTOK   275
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -508,15 +507,16 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
-      15,    16,    17,    18,    19,    20,    21,    22
+      15,    16,    17,    18,    19,    20
 };
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    56,    56,    57,    75,    76,    77,    78,    79,    80,
-      81,    82
+       0,    56,    56,    57,    58,    62,    63,    64,    65,    66,
+      67,    68,    69,    73,    74,    75,    76,    77,    78,    79,
+      80
 };
 #endif
 
@@ -535,7 +535,7 @@ static const char *const yytname[] =
   "\"end of file\"", "error", "\"invalid token\"", "CST", "IDT", "PO_ADD",
   "PO_SUB", "PO_MUL", "PO_DIV", "PO_AFF", "PR_EQ", "PR_GT", "PR_GE",
   "PR_LT", "PR_LE", "PB_AND", "PB_OR", "PB_NOT", "SEMICOLON", "LB", "RB",
-  "PO_AND", "PO_OR", "$accept", "program", "expr", YY_NULLPTR
+  "$accept", "program", "bool_expr", "expr", YY_NULLPTR
 };
 
 static const char *
@@ -559,8 +559,10 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -5,     0,    -5,    -5,    -4,    -2,     5,    -2,     1,    -2,
-      -2,    -2,    -2,    -5,    23,    -5,     7,     7,    -5,    -5
+      -5,     7,    -5,    -5,    -3,    10,    27,    22,    44,    27,
+      -5,    58,    28,    10,    10,    -5,    27,    27,    27,    27,
+      27,    27,    27,    27,    27,    -5,    -4,    -5,    -5,    -5,
+      34,    34,    -5,    -5,    -4,    -4,    -4,    -4,    -4
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -568,20 +570,22 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       2,     0,     1,    10,    11,     0,     0,     0,     0,     0,
-       0,     0,     0,     3,     4,     9,     5,     6,     7,     8
+       2,     0,     1,    19,    20,     0,     0,     0,     0,     0,
+      12,     0,     0,     0,     0,     4,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     3,    13,    18,    10,    11,
+      14,    15,    16,    17,     5,     6,     7,     8,     9
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -5,    -5,    15
+      -5,    -5,    62,    -1
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     1,     6
+       0,     1,     7,    11
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -589,40 +593,52 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-       2,     3,     4,     3,     4,     7,     9,    10,    11,    12,
-       9,    10,    11,    12,    11,    12,     0,     5,     0,     5,
-       8,    15,    14,    13,    16,    17,    18,    19,     9,    10,
-      11,    12
+       8,    16,    17,    18,    19,    12,     9,     2,    26,     0,
+       3,     4,     0,     3,     4,    30,    31,    32,    33,    34,
+      35,    36,    37,    38,     5,     0,     6,     5,     0,     6,
+       3,     4,     0,    16,    17,    18,    19,    13,    14,     0,
+      15,    18,    19,     0,     0,     0,     6,     0,    27,    16,
+      17,    18,    19,     0,    20,    21,    22,    23,    24,     0,
+       0,     0,    25,    16,    17,    18,    19,    10,    20,    21,
+      22,    23,    24,     0,     0,    28,    29
 };
 
 static const yytype_int8 yycheck[] =
 {
-       0,     3,     4,     3,     4,     9,     5,     6,     7,     8,
-       5,     6,     7,     8,     7,     8,    -1,    19,    -1,    19,
-       5,    20,     7,    18,     9,    10,    11,    12,     5,     6,
-       7,     8
+       1,     5,     6,     7,     8,     6,     9,     0,     9,    -1,
+       3,     4,    -1,     3,     4,    16,    17,    18,    19,    20,
+      21,    22,    23,    24,    17,    -1,    19,    17,    -1,    19,
+       3,     4,    -1,     5,     6,     7,     8,    15,    16,    -1,
+      18,     7,     8,    -1,    -1,    -1,    19,    -1,    20,     5,
+       6,     7,     8,    -1,    10,    11,    12,    13,    14,    -1,
+      -1,    -1,    18,     5,     6,     7,     8,     5,    10,    11,
+      12,    13,    14,    -1,    -1,    13,    14
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,    24,     0,     3,     4,    19,    25,     9,    25,     5,
-       6,     7,     8,    18,    25,    20,    25,    25,    25,    25
+       0,    22,     0,     3,     4,    17,    19,    23,    24,     9,
+      23,    24,    24,    15,    16,    18,     5,     6,     7,     8,
+      10,    11,    12,    13,    14,    18,    24,    20,    23,    23,
+      24,    24,    24,    24,    24,    24,    24,    24,    24
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    23,    24,    24,    25,    25,    25,    25,    25,    25,
-      25,    25
+       0,    21,    22,    22,    22,    23,    23,    23,    23,    23,
+      23,    23,    23,    24,    24,    24,    24,    24,    24,    24,
+      24
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
        0,     2,     0,     3,     3,     3,     3,     3,     3,     3,
-       1,     1
+       3,     3,     2,     3,     3,     3,     3,     3,     3,     1,
+       1
 };
 
 
@@ -710,103 +726,109 @@ yy_symbol_value_print (FILE *yyo,
     case YYSYMBOL_CST: /* CST  */
 #line 49 "src/parser/parser.y"
          { printASTNode(((*yyvaluep).node)); }
-#line 714 "src/parser/parser.c"
+#line 730 "src/parser/parser.c"
         break;
 
     case YYSYMBOL_IDT: /* IDT  */
 #line 48 "src/parser/parser.y"
          { fprintf(yyo, "%s", ((*yyvaluep).identifier)); }
-#line 720 "src/parser/parser.c"
+#line 736 "src/parser/parser.c"
         break;
 
     case YYSYMBOL_PO_ADD: /* PO_ADD  */
 #line 49 "src/parser/parser.y"
          { printASTNode(((*yyvaluep).node)); }
-#line 726 "src/parser/parser.c"
+#line 742 "src/parser/parser.c"
         break;
 
     case YYSYMBOL_PO_SUB: /* PO_SUB  */
 #line 49 "src/parser/parser.y"
          { printASTNode(((*yyvaluep).node)); }
-#line 732 "src/parser/parser.c"
+#line 748 "src/parser/parser.c"
         break;
 
     case YYSYMBOL_PO_MUL: /* PO_MUL  */
 #line 49 "src/parser/parser.y"
          { printASTNode(((*yyvaluep).node)); }
-#line 738 "src/parser/parser.c"
+#line 754 "src/parser/parser.c"
         break;
 
     case YYSYMBOL_PO_DIV: /* PO_DIV  */
 #line 49 "src/parser/parser.y"
          { printASTNode(((*yyvaluep).node)); }
-#line 744 "src/parser/parser.c"
+#line 760 "src/parser/parser.c"
         break;
 
     case YYSYMBOL_PO_AFF: /* PO_AFF  */
 #line 49 "src/parser/parser.y"
          { printASTNode(((*yyvaluep).node)); }
-#line 750 "src/parser/parser.c"
+#line 766 "src/parser/parser.c"
         break;
 
     case YYSYMBOL_PR_EQ: /* PR_EQ  */
 #line 49 "src/parser/parser.y"
          { printASTNode(((*yyvaluep).node)); }
-#line 756 "src/parser/parser.c"
+#line 772 "src/parser/parser.c"
         break;
 
     case YYSYMBOL_PR_GT: /* PR_GT  */
 #line 49 "src/parser/parser.y"
          { printASTNode(((*yyvaluep).node)); }
-#line 762 "src/parser/parser.c"
+#line 778 "src/parser/parser.c"
         break;
 
     case YYSYMBOL_PR_GE: /* PR_GE  */
 #line 49 "src/parser/parser.y"
          { printASTNode(((*yyvaluep).node)); }
-#line 768 "src/parser/parser.c"
+#line 784 "src/parser/parser.c"
         break;
 
     case YYSYMBOL_PR_LT: /* PR_LT  */
 #line 49 "src/parser/parser.y"
          { printASTNode(((*yyvaluep).node)); }
-#line 774 "src/parser/parser.c"
+#line 790 "src/parser/parser.c"
         break;
 
     case YYSYMBOL_PR_LE: /* PR_LE  */
 #line 49 "src/parser/parser.y"
          { printASTNode(((*yyvaluep).node)); }
-#line 780 "src/parser/parser.c"
+#line 796 "src/parser/parser.c"
         break;
 
     case YYSYMBOL_PB_AND: /* PB_AND  */
 #line 49 "src/parser/parser.y"
          { printASTNode(((*yyvaluep).node)); }
-#line 786 "src/parser/parser.c"
+#line 802 "src/parser/parser.c"
         break;
 
     case YYSYMBOL_PB_OR: /* PB_OR  */
 #line 49 "src/parser/parser.y"
          { printASTNode(((*yyvaluep).node)); }
-#line 792 "src/parser/parser.c"
+#line 808 "src/parser/parser.c"
         break;
 
     case YYSYMBOL_PB_NOT: /* PB_NOT  */
 #line 49 "src/parser/parser.y"
          { printASTNode(((*yyvaluep).node)); }
-#line 798 "src/parser/parser.c"
+#line 814 "src/parser/parser.c"
         break;
 
     case YYSYMBOL_program: /* program  */
 #line 49 "src/parser/parser.y"
          { printASTNode(((*yyvaluep).node)); }
-#line 804 "src/parser/parser.c"
+#line 820 "src/parser/parser.c"
+        break;
+
+    case YYSYMBOL_bool_expr: /* bool_expr  */
+#line 49 "src/parser/parser.y"
+         { printASTNode(((*yyvaluep).node)); }
+#line 826 "src/parser/parser.c"
         break;
 
     case YYSYMBOL_expr: /* expr  */
 #line 49 "src/parser/parser.y"
          { printASTNode(((*yyvaluep).node)); }
-#line 810 "src/parser/parser.c"
+#line 832 "src/parser/parser.c"
         break;
 
       default:
@@ -1197,66 +1219,120 @@ yyreduce:
     {
   case 2: /* program: %empty  */
 #line 56 "src/parser/parser.y"
-                                                {(yyval.node) = NULL;}
-#line 1202 "src/parser/parser.c"
+                                                        {(yyval.node) = NULL;}
+#line 1224 "src/parser/parser.c"
     break;
 
   case 3: /* program: program expr SEMICOLON  */
 #line 57 "src/parser/parser.y"
+                                                {addChildASTNode(root, (yyvsp[-1].node));}
+#line 1230 "src/parser/parser.c"
+    break;
+
+  case 4: /* program: program bool_expr SEMICOLON  */
+#line 58 "src/parser/parser.y"
                                         {addChildASTNode(root, (yyvsp[-1].node));}
-#line 1208 "src/parser/parser.c"
+#line 1236 "src/parser/parser.c"
     break;
 
-  case 4: /* expr: IDT PO_AFF expr  */
-#line 75 "src/parser/parser.y"
-                                                {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node),  newASTVariable((yyvsp[-2].identifier))); appendHashMap((yyvsp[-2].identifier), currentSymboleTable->length, currentSymboleTable); addChildASTNode((yyval.node), (yyvsp[0].node));}
-#line 1214 "src/parser/parser.c"
+  case 5: /* bool_expr: expr PR_EQ expr  */
+#line 62 "src/parser/parser.y"
+                                                {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}
+#line 1242 "src/parser/parser.c"
     break;
 
-  case 5: /* expr: expr PO_ADD expr  */
-#line 76 "src/parser/parser.y"
-                                                {if ((yyvsp[-2].node)->nodeType == ST_CST && (yyvsp[0].node)->nodeType == ST_CST){(yyval.node) = newASTConstant((yyvsp[-2].node)->data.value + (yyvsp[0].node)->data.value);} else {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}}
-#line 1220 "src/parser/parser.c"
+  case 6: /* bool_expr: expr PR_GT expr  */
+#line 63 "src/parser/parser.y"
+                                                {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}
+#line 1248 "src/parser/parser.c"
     break;
 
-  case 6: /* expr: expr PO_SUB expr  */
-#line 77 "src/parser/parser.y"
-                                                {if ((yyvsp[-2].node)->nodeType == ST_CST && (yyvsp[0].node)->nodeType == ST_CST){(yyval.node) = newASTConstant((yyvsp[-2].node)->data.value - (yyvsp[0].node)->data.value);} else {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}}
-#line 1226 "src/parser/parser.c"
+  case 7: /* bool_expr: expr PR_GE expr  */
+#line 64 "src/parser/parser.y"
+                                                {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}
+#line 1254 "src/parser/parser.c"
     break;
 
-  case 7: /* expr: expr PO_MUL expr  */
-#line 78 "src/parser/parser.y"
-                                                {if ((yyvsp[-2].node)->nodeType == ST_CST && (yyvsp[0].node)->nodeType == ST_CST){(yyval.node) = newASTConstant((yyvsp[-2].node)->data.value * (yyvsp[0].node)->data.value);} else {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}}
-#line 1232 "src/parser/parser.c"
-    break;
-
-  case 8: /* expr: expr PO_DIV expr  */
-#line 79 "src/parser/parser.y"
-                                                {if ((yyvsp[-2].node)->nodeType == ST_CST && (yyvsp[0].node)->nodeType == ST_CST){(yyval.node) = newASTConstant((yyvsp[-2].node)->data.value / (yyvsp[0].node)->data.value);} else {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}}
-#line 1238 "src/parser/parser.c"
-    break;
-
-  case 9: /* expr: LB expr RB  */
-#line 80 "src/parser/parser.y"
-                                                        {(yyval.node) = (yyvsp[-1].node);}
-#line 1244 "src/parser/parser.c"
-    break;
-
-  case 10: /* expr: CST  */
-#line 81 "src/parser/parser.y"
-                                                        {(yyval.node) = (yyvsp[0].node);}
-#line 1250 "src/parser/parser.c"
-    break;
-
-  case 11: /* expr: IDT  */
-#line 82 "src/parser/parser.y"
-                                                        {(inHashMap((yyvsp[0].identifier), currentSymboleTable)) ? (yyval.node) = newASTVariable((yyvsp[0].identifier)) : fatalError("Used before assignation", 1);}
-#line 1256 "src/parser/parser.c"
-    break;
-
-
+  case 8: /* bool_expr: expr PR_LT expr  */
+#line 65 "src/parser/parser.y"
+                                                {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}
 #line 1260 "src/parser/parser.c"
+    break;
+
+  case 9: /* bool_expr: expr PR_LE expr  */
+#line 66 "src/parser/parser.y"
+                                                {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}
+#line 1266 "src/parser/parser.c"
+    break;
+
+  case 10: /* bool_expr: bool_expr PB_AND bool_expr  */
+#line 67 "src/parser/parser.y"
+                                        {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}
+#line 1272 "src/parser/parser.c"
+    break;
+
+  case 11: /* bool_expr: bool_expr PB_OR bool_expr  */
+#line 68 "src/parser/parser.y"
+                                        {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}
+#line 1278 "src/parser/parser.c"
+    break;
+
+  case 12: /* bool_expr: PB_NOT bool_expr  */
+#line 69 "src/parser/parser.y"
+                                                {(yyval.node) = (yyvsp[0].node); addChildASTNode((yyval.node), (yyvsp[0].node));}
+#line 1284 "src/parser/parser.c"
+    break;
+
+  case 13: /* expr: IDT PO_AFF expr  */
+#line 73 "src/parser/parser.y"
+                                                {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node),  newASTVariable((yyvsp[-2].identifier))); appendHashMap((yyvsp[-2].identifier), currentSymboleTable->length, currentSymboleTable); addChildASTNode((yyval.node), (yyvsp[0].node));}
+#line 1290 "src/parser/parser.c"
+    break;
+
+  case 14: /* expr: expr PO_ADD expr  */
+#line 74 "src/parser/parser.y"
+                                                {if ((yyvsp[-2].node)->nodeType == ST_CST && (yyvsp[0].node)->nodeType == ST_CST){(yyval.node) = newASTConstant((yyvsp[-2].node)->data.value + (yyvsp[0].node)->data.value);} else {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}}
+#line 1296 "src/parser/parser.c"
+    break;
+
+  case 15: /* expr: expr PO_SUB expr  */
+#line 75 "src/parser/parser.y"
+                                                {if ((yyvsp[-2].node)->nodeType == ST_CST && (yyvsp[0].node)->nodeType == ST_CST){(yyval.node) = newASTConstant((yyvsp[-2].node)->data.value - (yyvsp[0].node)->data.value);} else {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}}
+#line 1302 "src/parser/parser.c"
+    break;
+
+  case 16: /* expr: expr PO_MUL expr  */
+#line 76 "src/parser/parser.y"
+                                                {if ((yyvsp[-2].node)->nodeType == ST_CST && (yyvsp[0].node)->nodeType == ST_CST){(yyval.node) = newASTConstant((yyvsp[-2].node)->data.value * (yyvsp[0].node)->data.value);} else {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}}
+#line 1308 "src/parser/parser.c"
+    break;
+
+  case 17: /* expr: expr PO_DIV expr  */
+#line 77 "src/parser/parser.y"
+                                                {if ((yyvsp[-2].node)->nodeType == ST_CST && (yyvsp[0].node)->nodeType == ST_CST){(yyval.node) = newASTConstant((yyvsp[-2].node)->data.value / (yyvsp[0].node)->data.value);} else {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}}
+#line 1314 "src/parser/parser.c"
+    break;
+
+  case 18: /* expr: LB expr RB  */
+#line 78 "src/parser/parser.y"
+                                                        {(yyval.node) = (yyvsp[-1].node);}
+#line 1320 "src/parser/parser.c"
+    break;
+
+  case 19: /* expr: CST  */
+#line 79 "src/parser/parser.y"
+                                                        {(yyval.node) = (yyvsp[0].node);}
+#line 1326 "src/parser/parser.c"
+    break;
+
+  case 20: /* expr: IDT  */
+#line 80 "src/parser/parser.y"
+                                                        {(inHashMap((yyvsp[0].identifier), currentSymboleTable)) ? (yyval.node) = newASTVariable((yyvsp[0].identifier)) : fatalError("Used before assignation", 1);}
+#line 1332 "src/parser/parser.c"
+    break;
+
+
+#line 1336 "src/parser/parser.c"
 
       default: break;
     }
@@ -1449,7 +1525,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 85 "src/parser/parser.y"
+#line 83 "src/parser/parser.y"
 
 
 int yyerror(ASTNode *root, HashMap *currentSymboleTable, char *s) {

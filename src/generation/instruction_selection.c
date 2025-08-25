@@ -23,6 +23,7 @@ InstructionName operatorToInstruction(Operator op){
 		default:
 			fatalError("Unsupported Operator", -1);
 	}
+	return SI_UNKOWN;
 }
 
 void handleOperatorNode(ASTNode *node, InstStream *is){
@@ -32,36 +33,36 @@ void handleOperatorNode(ASTNode *node, InstStream *is){
 }
 
 
-Variable ASTToInstStreamRec(ASTNode *node, InstStream *is){
-	switch (node->nodeType){
-	case ST_CTX:
-		break;
+// Variable ASTToInstStreamRec(ASTNode *node, InstStream *is){
+// 	switch (node->nodeType){
+// 	case ST_CTX:
+// 		break;
 	
-	case ST_OPE:
-		if ( node->childCount != 2){
-			fatalError("Only binary operators are supported", -1);
-		}
+// 	case ST_OPE:
+// 		if ( node->childCount != 2){
+// 			fatalError("Only binary operators are supported", -1);
+// 		}
 
-		handleOperatorNode(node, is);
-		break;
+// 		handleOperatorNode(node, is);
+// 		break;
 
-	case ST_CST:
-		char name[10];
-		snprintf(name, 10, "%lu", node->data.value);
-		Variable v = newVariable(name, NEW_INT(), true, node->data.value);
-		Instruction instr = newInstruction(SI_MOV, name, );
+// 	case ST_CST:
+// 		char name[10];
+// 		snprintf(name, 10, "%lu", node->data.value);
+// 		Variable v = newVariable(name, NEW_INT(), true, node->data.value);
+// 		Instruction instr = newInstruction(SI_MOV, name, );
 
-		return
+// 		return;
 	
-	default:
-		break;
-	}
+// 	default:
+// 		break;
+// 	}
 
 
-}
+// }
 
-void ASTToInstStream(ASTNode *root){
-	InstStream *is = newInstStream();
-	ASTToInstStreamRec(root, is);
-	return is;
-}
+// void ASTToInstStream(ASTNode *root){
+// 	InstStream *is = newInstStream();
+// 	ASTToInstStreamRec(root, is);
+// 	return is;
+// }

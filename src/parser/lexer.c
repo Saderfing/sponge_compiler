@@ -1384,17 +1384,17 @@ YY_RULE_SETUP
 case 12:
 YY_RULE_SETUP
 #line 29 "src/parser/lexer.l"
-{yylval.node = newASTOperator(SB_AND); return PB_AND;}
+{yylval.node = newASTOperator(SO_AND); return PB_AND;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
 #line 30 "src/parser/lexer.l"
-{yylval.node = newASTOperator(SB_OR);  return PB_OR; }
+{yylval.node = newASTOperator(SO_OR);  return PB_OR; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
 #line 31 "src/parser/lexer.l"
-{yylval.node = newASTOperator(SB_NOT); return PB_NOT;}
+{yylval.node = newASTOperator(SO_NOT); return PB_NOT;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP

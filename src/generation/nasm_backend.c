@@ -4,6 +4,10 @@
 #define WRITE_LABEL_DEFINITION(outputFile, label)	fprintf(outputFile, "global %s\n", label)
 #define WRITE_LABEL(outputFile, label)				fprintf(outputFile, "%s:", label)
 
+void generateTextSectionContent(ASTNode *root, FILE *outputFile){
+
+}
+
 void generateTextSection(ASTNode *root, FILE *outputFile){
 	WRITE_LABEL_DEFINITION(outputFile, "_start");
 	WRITE_TEXT_SECTION(outputFile);

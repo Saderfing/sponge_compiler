@@ -15,7 +15,7 @@ ASTNode *handleOperator(ASTNode *root, ASTNode *ctx, uint64_t *temporaryCreation
 	ASTNode *leftValue;
 	ASTNode *rightValue;
 	if (root->childCount < 1 || root->childCount > 2){
-		fprintf(stderr, "Child count %dnot supported\n", root->childCount);
+		fprintf(stderr, "Child count %lu not supported\n", root->childCount);
 		exit(-1);
 	}
 	
@@ -30,7 +30,7 @@ ASTNode *handleOperator(ASTNode *root, ASTNode *ctx, uint64_t *temporaryCreation
 	char *name = (char *)allocate(MAX_IDENTIFIER_SIZE + 1, "Allocating name for temporary");
 	snprintf(name, MAX_IDENTIFIER_SIZE, "%lu", *temporaryCreation);
 	(*temporaryCreation)++;
-	name[MAX_IDENTIFIER_SIZE] = "\0";
+	name[MAX_IDENTIFIER_SIZE - 1] = "\0";
 
 	ASTNode *dest = newASTVariable(name);
 	ASTNode *newRightValue = newASTVariable(strdup(name));
@@ -54,7 +54,6 @@ ASTNode *handleContext(ASTNode *root, ASTNode *ctx, uint64_t *temporaryCreation)
 		subContext = ASTToSSARec(root->child[i], newContext, temporaryCreation); // TODO: Fuse symbole tables or make it global with the associated context name/id
 		addChildASTNode(newContext, subContext);
 	}
-	printf("---------------------\n\n");
 	printAST(newContext);
 	return newContext;
 }
