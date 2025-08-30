@@ -9,7 +9,6 @@ Variable newVariable(char *name, Type type, bool defined, int64_t value){
 	v.name		= strdup(name);
 	v.type		= type;
 	v.defined	= defined;
-	v.value		= value;
 	return v;
 }
 
@@ -30,12 +29,7 @@ void setVariableName(char *name, Variable v){
 }
 
 void printVariable(Variable *var){
+	printf("\n-=[ Variable ]=-\n name : %s\n", var->name);
 	printType(var->type);
-	printf(" %s = ", var->name);
-	
-	if (var->defined){
-		printf("%lx", var->value);
-	} else {
-		printf("UNDEFINED");
-	}
+	printf("\n-----------\n");
 }

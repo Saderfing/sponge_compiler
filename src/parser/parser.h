@@ -89,9 +89,14 @@ extern int yydebug;
     PB_AND = 270,                  /* PB_AND  */
     PB_OR = 271,                   /* PB_OR  */
     PB_NOT = 272,                  /* PB_NOT  */
-    SEMICOLON = 273,               /* SEMICOLON  */
-    LB = 274,                      /* LB  */
-    RB = 275                       /* RB  */
+    PB_IF = 273,                   /* PB_IF  */
+    PB_ELIF = 274,                 /* PB_ELIF  */
+    PB_ELSE = 275,                 /* PB_ELSE  */
+    SEMICOLON = 276,               /* SEMICOLON  */
+    LEFT_BRACKET = 277,            /* LEFT_BRACKET  */
+    RIGHT_BRACKET = 278,           /* RIGHT_BRACKET  */
+    LEFT_BRACE = 279,              /* LEFT_BRACE  */
+    RIGHT_BRACE = 280              /* RIGHT_BRACE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -108,7 +113,7 @@ union YYSTYPE
 
 	ASTNode *node;
 
-#line 112 "src/parser/parser.h"
+#line 117 "src/parser/parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -120,7 +125,7 @@ typedef union YYSTYPE YYSTYPE;
 extern YYSTYPE yylval;
 
 
-int yyparse (ASTNode *root, HashMap *currentSymboleTable);
+int yyparse (ASTNode **root);
 
 
 #endif /* !YY_YY_SRC_PARSER_PARSER_H_INCLUDED  */

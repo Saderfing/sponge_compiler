@@ -30,5 +30,11 @@ Instruction newInstruction(InstructionName name, Variable dest, Variable arg0, V
 }
 
 void printInstruction(Instruction inst){
-	printf("%u %s %s %s\n", inst.instr, inst.dest.name, inst.arg0.name, inst.arg1.name);
+
+	if (instRepr > SI_UNKOWN){
+		printf("Unknown instruction");
+		return;
+	}
+
+	printf("%s %s %s %s\n", instRepr[inst.instr], inst.dest.name, inst.arg0.name, inst.arg1.name);
 }

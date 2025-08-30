@@ -7,7 +7,6 @@ typedef struct {
 	char *name;
 	Type type;
 	bool defined;
-	int64_t value;
 } Variable;
 
 Variable newVariable(char *name, Type type, bool defined, int64_t value);
