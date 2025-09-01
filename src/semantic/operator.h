@@ -20,6 +20,7 @@ typedef enum {
 	SO_LT,
 	SO_GE,
 	SO_LE,
+	SO_NE,
 
 	SO_AND,
 	SO_OR,

@@ -33,8 +33,9 @@
 
 %token <node> CST 
 %token <identifier> IDT
-%token <node> PO_ADD PO_SUB PO_MUL PO_DIV PO_AFF PR_EQ PR_GT PR_GE PR_LT PR_LE PB_AND PB_OR PB_NOT
+%token <node> PO_ADD PO_SUB PO_MUL PO_DIV PO_AFF PR_EQ PR_GT PR_GE PR_LT PR_LE PR_NE PB_AND PB_OR PB_NOT
 %token <node> PB_IF PB_ELIF PB_ELSE
+%token <node> PB_WHILE
 %token SEMICOLON LEFT_BRACKET RIGHT_BRACKET LEFT_BRACE RIGHT_BRACE
 
 %precedence PO_AFF
@@ -43,7 +44,7 @@
 %left PO_ADD PO_SUB
 %left PO_MUL PO_DIV
 
-%type <node> expr program bool_expr context if_statement optional_if
+%type <node> expr program bool_expr context if_statement optional_if while_loop
 
 %destructor { free($$); } <identifier>
 
@@ -59,6 +60,7 @@ context:%empty						{$$ = newASTContext(NULL, newHashMap());}
 	|context bool_expr SEMICOLON	{$$ = $1; addChildASTNode($$, $2);}
 	|context expr SEMICOLON 		{$$ = $1; addChildASTNode($$, $2);}
 	|context if_statement 			{$$ = $1; addChildASTNode($$, $2);}
+	|context while_loop				{$$ = $1; addChildASTNode($$, $2);}
 	;
 
 if_statement:
@@ -69,12 +71,17 @@ optional_if: %empty													{$$ = NULL;}
 	|PB_ELIF bool_expr LEFT_BRACE context RIGHT_BRACE optional_if	{$$ = newASTBranch(SB_ELIF); addChildASTNode($$, $2); addChildASTNode($$, $4); addChildASTNode($$, $6);}
 	|PB_ELSE LEFT_BRACE context RIGHT_BRACE							{$$ = newASTBranch(SB_ELSE); addChildASTNode($$, $3);}
 
+while_loop:
+	PB_WHILE bool_expr LEFT_BRACE context RIGHT_BRACE				{$$ = newASTBranch(SB_WHILE); addChildASTNode($$, $2); addChildASTNode($$, $4);}
+	;
+
 bool_expr:
 	 expr PR_EQ expr						{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}
 	|expr PR_GT expr						{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}
 	|expr PR_GE expr						{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}
 	|expr PR_LT expr						{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}
 	|expr PR_LE expr						{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}
+	|expr PR_NE expr						{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}
 	|bool_expr PB_AND bool_expr				{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}
 	|bool_expr PB_OR bool_expr				{$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}
 	|LEFT_BRACKET bool_expr RIGHT_BRACKET	{$$ = $2;}

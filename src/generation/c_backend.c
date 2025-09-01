@@ -1,7 +1,7 @@
 #include "c_backend.h"
 
 char *getCReprOperator(Operator op){
-	static const char *COperatorRepr[] = {"+", "-", "*", "/", "%", "<<", ">>", "=", "==", ">", "<", ">=", "<=", "&&", "||", "!"};
+	static const char *COperatorRepr[] = {"+", "-", "*", "/", "%", "<<", ">>", "=", "==", ">", "<", ">=", "<=", "!=", "&&", "||", "!"};
 
 	if (op >= SO_UNKOWN){
 		fatalError("Unsupported operator for C\n", -1);
@@ -11,6 +11,13 @@ char *getCReprOperator(Operator op){
 }
 
 #define CONDITIONNAL_PREFIX(index) (index <= 1) ? "if" : "else if"
+#define WRITE_IN_PARENTHESIS(child, outputFile) fprintf(outputFile, "(");						\
+												generateCCodeRec(child, depth + 1, outputFile);	\
+												fprintf(outputFile, ")")
+
+#define WRITE_IN_CONTEXT(child, outputFile)	fprintf(outputFile, "{");						\
+											generateCCodeRec(child, depth + 1, outputFile);	\
+											fprintf(outputFile, "}")
 
 
 void generateCCodeRec(ASTNode *root, uint64_t depth, FILE* outputFile){
@@ -66,18 +73,17 @@ void generateCCodeRec(ASTNode *root, uint64_t depth, FILE* outputFile){
 	case ST_BCH:
 		printf("Generating C code for branch\n%lu\n", root->childCount);
 		
-		switch (GET_BRANCH_TYPE(root) ){
-			case SB_IF: 
-				
-				for (uint64_t i = 0; i < root->childCount - (root->childCount % 2); i += 2){
-					fprintf(outputFile, CONDITIONNAL_PREFIX(i));
-					
-					fprintf(outputFile, "(");
-					generateCCodeRec(root->child[i], depth, outputFile);
-					fprintf(outputFile, ")");
-					fprintf(outputFile, "{\n\t");
-					generateCCodeRec(root->child[i + 1], depth + 1, outputFile);
-					fprintf(outputFile, "}");
+		switch (root->data.branchType){
+			case SB_IF  : 
+				fprintf(outputFile, "if ");
+				for (uint64_t i = 0; i < root->childCount; i++){
+					if (root->child[i]->nodeType == ST_OPE){
+						WRITE_IN_PARENTHESIS(root->child[i], outputFile);
+					} else if (root->child[i]->nodeType == ST_CTX){
+						WRITE_IN_CONTEXT(root->child[i], outputFile);
+					} else {
+						generateCCodeRec(root->child[i], depth, outputFile);
+					}
 				}
 				
 				if ((root->childCount % 2) == 1){
@@ -94,8 +100,13 @@ void generateCCodeRec(ASTNode *root, uint64_t depth, FILE* outputFile){
 				fatalError("Unknown branch type for C code generation\n", -1);
 				break;
 
-			default:
+				fprintf(outputFile, "while ");
+				WRITE_IN_PARENTHESIS(root->child[0], outputFile);
+				WRITE_IN_CONTEXT(root->child[1], outputFile);
+
 				break;
+
+			default: fatalError("Unsupported branch type\n", -1);
 		}
 		break;
 

@@ -1,6 +1,6 @@
 #include "operator.h"	
 
-static const char *operatorRepr[] = {"+", "-", "*", "/", "%", "<<", ">>", "=", "==", ">", "<", ">=", "<=", "and", "or", "not"};
+static const char *operatorRepr[] = {"+", "-", "*", "/", "%", "<<", ">>", "=", "==", ">", "<", ">=", "<=", "!=", "and", "or", "not"};
 
 void printOperator(Operator op){
 	if (op >= SO_UNKOWN){
