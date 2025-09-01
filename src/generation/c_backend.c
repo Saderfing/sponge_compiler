@@ -20,6 +20,7 @@ char *getCReprOperator(Operator op){
 											generateCCodeRec(child, depth, outputFile);	\
 											fprintf(outputFile, "}")
 
+
 void generateCCodeRec(ASTNode *root, uint64_t depth, FILE* outputFile){
 	if (!root){
 		printf("Error: NULL ASTNode passed to generateCCodeRec\n");
@@ -106,6 +107,7 @@ void generateCCodeRec(ASTNode *root, uint64_t depth, FILE* outputFile){
 			default:
 				fatalError("Unknown branch type for C code generation\n", -1);
 				break;
+
 		}
 		break;
 
