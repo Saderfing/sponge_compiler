@@ -82,16 +82,16 @@ ASTNode *newASTVariable(char *varName){
 }
 
 int8_t allocateChild(ASTNode *node){
-	if (!node || !node->childCount + 1 < node->sizeAllocated){
+	if (!node || node->childCount + 1 < node->sizeAllocated){
 		return 0;
 	}
 
 	uint64_t sizeToAlloc = 0;
 	ASTNode **newASTNode = NULL;
-	if (node->childCount == 0){
+	if (node->sizeAllocated == 0){
 		sizeToAlloc = 1;
 	} else {
-		sizeToAlloc = 2 * node->childCount;
+		sizeToAlloc = 2 * node->sizeAllocated;
 	}
 
 	newASTNode = (ASTNode **)realloc(node->child, sizeToAlloc * sizeof(ASTNode *));
@@ -141,6 +141,18 @@ void addChildASTNode(ASTNode *root, ASTNode *child){
 	root->child[root->childCount] = child;
 	child->parent				  = root;
 	root->childCount++;
+}
+
+void squachIfStatements(ASTNode *ifNode, ASTNode *root){
+	if (!root){
+		return;
+	}
+
+	if (root->nodeType == ST_BCH){
+		for (uint64_t i = 0; i < root->childCount; i++){
+			
+		}
+	}
 }
 
 static char *nodeTypeRepr[] = {"Variable", "Constant", "Operator"};
@@ -200,9 +212,30 @@ void printAST(ASTNode *root){
 
 	for (uint64_t i = 0; i < root->childCount ; i++){
 		printAST(root->child[i]);
-		if (root->nodeType == ST_CTX){
-			printf(";\n");
-		}
+	}
+}
+
+void freeASTNode(ASTNode *node){
+	if (!node){
+		return;
+	}
+
+	switch (node->nodeType){
+	case ST_VAR:
+		free(node->data.variable.name);
+		break;
+
+	case ST_CST:
+	case ST_OPE:
+	case ST_BCH:
+		break;
+
+	case ST_CTX:
+		freeContext(&(node->data.context));
+		break;
+
+	default:
+		break;
 	}
 }
 
@@ -215,9 +248,7 @@ void freeAST(ASTNode *node){
 		freeAST(node->child[i]);
 	}
 
-	if (node->nodeType == ST_VAR){
-		free(node->data.variable.name);
-	}
+	freeASTNode(node);
 	free(node->child);
 	free(node);
 }

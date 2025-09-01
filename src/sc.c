@@ -4,6 +4,7 @@
 #include "optimization.h"
 #include "code_generation.h"
 #include "parser.h" 
+#include "lexer.h"
 #include "hashmap.h"
 #include "ast.h"
 #include "ssa.h"
@@ -61,24 +62,22 @@ int main(int argc, char *argv[]){
 	yyin = openFile(argv[1], READ_MODE);
 
 	ASTNode *root = NULL;
-
 	u32 parseCode = yyparse(&root);
 	if (parseCode != 0){
 		fatalError("Parsing failed", parseCode);
 	}
-
 	buildSymboleTable(root);
-
-	printf("AST created at parse time:\n");
-	printAST(root);
-	printf("\n---------------------\n");
 
 	selectOptimization(root);
 
 	FILE *f = openFile("a.c", "w");
 	selectBackend(root, BACKEND_C, f);
+
 	closeFile(yyin);
 	closeFile(f);
+
+	yylex_destroy();
+	freeAST(root);
 
 	return 0;
 }

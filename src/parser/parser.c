@@ -523,9 +523,9 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    56,    56,    59,    60,    61,    62,    66,    69,    70,
-      71,    74,    75,    76,    77,    78,    79,    80,    81,    82,
-      86,    87,    88,    89,    90,    91,    92,    93
+       0,    55,    55,    58,    59,    60,    61,    65,    68,    69,
+      70,    73,    74,    75,    76,    77,    78,    79,    80,    81,
+      85,    86,    87,    88,    89,    90,    91,    92
 };
 #endif
 
@@ -750,149 +750,7 @@ yy_symbol_value_print (FILE *yyo,
   if (!yyvaluep)
     return;
   YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
-  switch (yykind)
-    {
-    case YYSYMBOL_CST: /* CST  */
-#line 49 "src/parser/parser.y"
-         { printf("\n-=[ CURRENT AST ]=-\n"); printAST(((*yyvaluep).node)); printf("\n============================\n");}
-#line 759 "src/parser/parser.c"
-        break;
-
-    case YYSYMBOL_PO_ADD: /* PO_ADD  */
-#line 49 "src/parser/parser.y"
-         { printf("\n-=[ CURRENT AST ]=-\n"); printAST(((*yyvaluep).node)); printf("\n============================\n");}
-#line 765 "src/parser/parser.c"
-        break;
-
-    case YYSYMBOL_PO_SUB: /* PO_SUB  */
-#line 49 "src/parser/parser.y"
-         { printf("\n-=[ CURRENT AST ]=-\n"); printAST(((*yyvaluep).node)); printf("\n============================\n");}
-#line 771 "src/parser/parser.c"
-        break;
-
-    case YYSYMBOL_PO_MUL: /* PO_MUL  */
-#line 49 "src/parser/parser.y"
-         { printf("\n-=[ CURRENT AST ]=-\n"); printAST(((*yyvaluep).node)); printf("\n============================\n");}
-#line 777 "src/parser/parser.c"
-        break;
-
-    case YYSYMBOL_PO_DIV: /* PO_DIV  */
-#line 49 "src/parser/parser.y"
-         { printf("\n-=[ CURRENT AST ]=-\n"); printAST(((*yyvaluep).node)); printf("\n============================\n");}
-#line 783 "src/parser/parser.c"
-        break;
-
-    case YYSYMBOL_PO_AFF: /* PO_AFF  */
-#line 49 "src/parser/parser.y"
-         { printf("\n-=[ CURRENT AST ]=-\n"); printAST(((*yyvaluep).node)); printf("\n============================\n");}
-#line 789 "src/parser/parser.c"
-        break;
-
-    case YYSYMBOL_PR_EQ: /* PR_EQ  */
-#line 49 "src/parser/parser.y"
-         { printf("\n-=[ CURRENT AST ]=-\n"); printAST(((*yyvaluep).node)); printf("\n============================\n");}
-#line 795 "src/parser/parser.c"
-        break;
-
-    case YYSYMBOL_PR_GT: /* PR_GT  */
-#line 49 "src/parser/parser.y"
-         { printf("\n-=[ CURRENT AST ]=-\n"); printAST(((*yyvaluep).node)); printf("\n============================\n");}
-#line 801 "src/parser/parser.c"
-        break;
-
-    case YYSYMBOL_PR_GE: /* PR_GE  */
-#line 49 "src/parser/parser.y"
-         { printf("\n-=[ CURRENT AST ]=-\n"); printAST(((*yyvaluep).node)); printf("\n============================\n");}
-#line 807 "src/parser/parser.c"
-        break;
-
-    case YYSYMBOL_PR_LT: /* PR_LT  */
-#line 49 "src/parser/parser.y"
-         { printf("\n-=[ CURRENT AST ]=-\n"); printAST(((*yyvaluep).node)); printf("\n============================\n");}
-#line 813 "src/parser/parser.c"
-        break;
-
-    case YYSYMBOL_PR_LE: /* PR_LE  */
-#line 49 "src/parser/parser.y"
-         { printf("\n-=[ CURRENT AST ]=-\n"); printAST(((*yyvaluep).node)); printf("\n============================\n");}
-#line 819 "src/parser/parser.c"
-        break;
-
-    case YYSYMBOL_PB_AND: /* PB_AND  */
-#line 49 "src/parser/parser.y"
-         { printf("\n-=[ CURRENT AST ]=-\n"); printAST(((*yyvaluep).node)); printf("\n============================\n");}
-#line 825 "src/parser/parser.c"
-        break;
-
-    case YYSYMBOL_PB_OR: /* PB_OR  */
-#line 49 "src/parser/parser.y"
-         { printf("\n-=[ CURRENT AST ]=-\n"); printAST(((*yyvaluep).node)); printf("\n============================\n");}
-#line 831 "src/parser/parser.c"
-        break;
-
-    case YYSYMBOL_PB_NOT: /* PB_NOT  */
-#line 49 "src/parser/parser.y"
-         { printf("\n-=[ CURRENT AST ]=-\n"); printAST(((*yyvaluep).node)); printf("\n============================\n");}
-#line 837 "src/parser/parser.c"
-        break;
-
-    case YYSYMBOL_PB_IF: /* PB_IF  */
-#line 49 "src/parser/parser.y"
-         { printf("\n-=[ CURRENT AST ]=-\n"); printAST(((*yyvaluep).node)); printf("\n============================\n");}
-#line 843 "src/parser/parser.c"
-        break;
-
-    case YYSYMBOL_PB_ELIF: /* PB_ELIF  */
-#line 49 "src/parser/parser.y"
-         { printf("\n-=[ CURRENT AST ]=-\n"); printAST(((*yyvaluep).node)); printf("\n============================\n");}
-#line 849 "src/parser/parser.c"
-        break;
-
-    case YYSYMBOL_PB_ELSE: /* PB_ELSE  */
-#line 49 "src/parser/parser.y"
-         { printf("\n-=[ CURRENT AST ]=-\n"); printAST(((*yyvaluep).node)); printf("\n============================\n");}
-#line 855 "src/parser/parser.c"
-        break;
-
-    case YYSYMBOL_program: /* program  */
-#line 49 "src/parser/parser.y"
-         { printf("\n-=[ CURRENT AST ]=-\n"); printAST(((*yyvaluep).node)); printf("\n============================\n");}
-#line 861 "src/parser/parser.c"
-        break;
-
-    case YYSYMBOL_context: /* context  */
-#line 49 "src/parser/parser.y"
-         { printf("\n-=[ CURRENT AST ]=-\n"); printAST(((*yyvaluep).node)); printf("\n============================\n");}
-#line 867 "src/parser/parser.c"
-        break;
-
-    case YYSYMBOL_if_statement: /* if_statement  */
-#line 49 "src/parser/parser.y"
-         { printf("\n-=[ CURRENT AST ]=-\n"); printAST(((*yyvaluep).node)); printf("\n============================\n");}
-#line 873 "src/parser/parser.c"
-        break;
-
-    case YYSYMBOL_optional_if: /* optional_if  */
-#line 49 "src/parser/parser.y"
-         { printf("\n-=[ CURRENT AST ]=-\n"); printAST(((*yyvaluep).node)); printf("\n============================\n");}
-#line 879 "src/parser/parser.c"
-        break;
-
-    case YYSYMBOL_bool_expr: /* bool_expr  */
-#line 49 "src/parser/parser.y"
-         { printf("\n-=[ CURRENT AST ]=-\n"); printAST(((*yyvaluep).node)); printf("\n============================\n");}
-#line 885 "src/parser/parser.c"
-        break;
-
-    case YYSYMBOL_expr: /* expr  */
-#line 49 "src/parser/parser.y"
-         { printf("\n-=[ CURRENT AST ]=-\n"); printAST(((*yyvaluep).node)); printf("\n============================\n");}
-#line 891 "src/parser/parser.c"
-        break;
-
-      default:
-        break;
-    }
+  YY_USE (yykind);
   YY_IGNORE_MAYBE_UNINITIALIZED_END
 }
 
@@ -1013,7 +871,17 @@ yydestruct (const char *yymsg,
   YY_SYMBOL_PRINT (yymsg, yykind, yyvaluep, yylocationp);
 
   YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
-  YY_USE (yykind);
+  switch (yykind)
+    {
+    case YYSYMBOL_IDT: /* IDT  */
+#line 48 "src/parser/parser.y"
+            { free(((*yyvaluep).identifier)); }
+#line 880 "src/parser/parser.c"
+        break;
+
+      default:
+        break;
+    }
   YY_IGNORE_MAYBE_UNINITIALIZED_END
 }
 
@@ -1276,163 +1144,163 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: context  */
-#line 56 "src/parser/parser.y"
+#line 55 "src/parser/parser.y"
                 {*root = (yyvsp[0].node);}
-#line 1282 "src/parser/parser.c"
+#line 1150 "src/parser/parser.c"
     break;
 
   case 3: /* context: %empty  */
-#line 59 "src/parser/parser.y"
+#line 58 "src/parser/parser.y"
                                                         {(yyval.node) = newASTContext(NULL, newHashMap());}
-#line 1288 "src/parser/parser.c"
+#line 1156 "src/parser/parser.c"
     break;
 
   case 4: /* context: context bool_expr SEMICOLON  */
-#line 60 "src/parser/parser.y"
+#line 59 "src/parser/parser.y"
                                         {(yyval.node) = (yyvsp[-2].node); addChildASTNode((yyval.node), (yyvsp[-1].node));}
-#line 1294 "src/parser/parser.c"
+#line 1162 "src/parser/parser.c"
     break;
 
   case 5: /* context: context expr SEMICOLON  */
-#line 61 "src/parser/parser.y"
+#line 60 "src/parser/parser.y"
                                                 {(yyval.node) = (yyvsp[-2].node); addChildASTNode((yyval.node), (yyvsp[-1].node));}
-#line 1300 "src/parser/parser.c"
+#line 1168 "src/parser/parser.c"
     break;
 
   case 6: /* context: context if_statement  */
-#line 62 "src/parser/parser.y"
+#line 61 "src/parser/parser.y"
                                                 {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), (yyvsp[0].node));}
-#line 1306 "src/parser/parser.c"
+#line 1174 "src/parser/parser.c"
     break;
 
   case 7: /* if_statement: PB_IF bool_expr LEFT_BRACE context RIGHT_BRACE optional_if  */
-#line 66 "src/parser/parser.y"
-                                                                   {(yyval.node) = newASTBranch(SB_IF); addChildASTNode((yyval.node), (yyvsp[-4].node)); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}
-#line 1312 "src/parser/parser.c"
+#line 65 "src/parser/parser.y"
+                                                                                {(yyval.node) = newASTBranch(SB_IF); addChildASTNode((yyval.node), (yyvsp[-4].node)); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}
+#line 1180 "src/parser/parser.c"
     break;
 
   case 8: /* optional_if: %empty  */
-#line 69 "src/parser/parser.y"
+#line 68 "src/parser/parser.y"
                                                                                                                         {(yyval.node) = NULL;}
-#line 1318 "src/parser/parser.c"
+#line 1186 "src/parser/parser.c"
     break;
 
   case 9: /* optional_if: PB_ELIF bool_expr LEFT_BRACE context RIGHT_BRACE optional_if  */
-#line 70 "src/parser/parser.y"
+#line 69 "src/parser/parser.y"
                                                                         {(yyval.node) = newASTBranch(SB_ELIF); addChildASTNode((yyval.node), (yyvsp[-4].node)); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}
-#line 1324 "src/parser/parser.c"
+#line 1192 "src/parser/parser.c"
     break;
 
   case 10: /* optional_if: PB_ELSE LEFT_BRACE context RIGHT_BRACE  */
-#line 71 "src/parser/parser.y"
+#line 70 "src/parser/parser.y"
                                                                                                 {(yyval.node) = newASTBranch(SB_ELSE); addChildASTNode((yyval.node), (yyvsp[-1].node));}
-#line 1330 "src/parser/parser.c"
+#line 1198 "src/parser/parser.c"
     break;
 
   case 11: /* bool_expr: expr PR_EQ expr  */
-#line 74 "src/parser/parser.y"
+#line 73 "src/parser/parser.y"
                                                                         {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}
-#line 1336 "src/parser/parser.c"
+#line 1204 "src/parser/parser.c"
     break;
 
   case 12: /* bool_expr: expr PR_GT expr  */
-#line 75 "src/parser/parser.y"
+#line 74 "src/parser/parser.y"
                                                                         {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}
-#line 1342 "src/parser/parser.c"
+#line 1210 "src/parser/parser.c"
     break;
 
   case 13: /* bool_expr: expr PR_GE expr  */
-#line 76 "src/parser/parser.y"
+#line 75 "src/parser/parser.y"
                                                                         {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}
-#line 1348 "src/parser/parser.c"
+#line 1216 "src/parser/parser.c"
     break;
 
   case 14: /* bool_expr: expr PR_LT expr  */
-#line 77 "src/parser/parser.y"
+#line 76 "src/parser/parser.y"
                                                                         {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}
-#line 1354 "src/parser/parser.c"
+#line 1222 "src/parser/parser.c"
     break;
 
   case 15: /* bool_expr: expr PR_LE expr  */
-#line 78 "src/parser/parser.y"
+#line 77 "src/parser/parser.y"
                                                                         {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}
-#line 1360 "src/parser/parser.c"
+#line 1228 "src/parser/parser.c"
     break;
 
   case 16: /* bool_expr: bool_expr PB_AND bool_expr  */
-#line 79 "src/parser/parser.y"
+#line 78 "src/parser/parser.y"
                                                                 {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}
-#line 1366 "src/parser/parser.c"
+#line 1234 "src/parser/parser.c"
     break;
 
   case 17: /* bool_expr: bool_expr PB_OR bool_expr  */
-#line 80 "src/parser/parser.y"
+#line 79 "src/parser/parser.y"
                                                                 {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}
-#line 1372 "src/parser/parser.c"
+#line 1240 "src/parser/parser.c"
     break;
 
   case 18: /* bool_expr: LEFT_BRACKET bool_expr RIGHT_BRACKET  */
-#line 81 "src/parser/parser.y"
+#line 80 "src/parser/parser.y"
                                                 {(yyval.node) = (yyvsp[-1].node);}
-#line 1378 "src/parser/parser.c"
+#line 1246 "src/parser/parser.c"
     break;
 
   case 19: /* bool_expr: PB_NOT bool_expr  */
-#line 82 "src/parser/parser.y"
+#line 81 "src/parser/parser.y"
                                                                         {(yyval.node) = (yyvsp[0].node); addChildASTNode((yyval.node), (yyvsp[0].node));}
-#line 1384 "src/parser/parser.c"
+#line 1252 "src/parser/parser.c"
     break;
 
   case 20: /* expr: IDT PO_AFF expr  */
-#line 86 "src/parser/parser.y"
-                                                                {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), newASTVariable((yyvsp[-2].identifier))); addChildASTNode((yyval.node), (yyvsp[0].node));}
-#line 1390 "src/parser/parser.c"
+#line 85 "src/parser/parser.y"
+                                                                {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), newASTVariable((yyvsp[-2].identifier))); addChildASTNode((yyval.node), (yyvsp[0].node)); free((yyvsp[-2].identifier));}
+#line 1258 "src/parser/parser.c"
     break;
 
   case 21: /* expr: expr PO_ADD expr  */
-#line 87 "src/parser/parser.y"
-                                                                {if ((yyvsp[-2].node)->nodeType == ST_CST && (yyvsp[0].node)->nodeType == ST_CST){(yyval.node) = newASTConstant((yyvsp[-2].node)->data.value + (yyvsp[0].node)->data.value); freeAST((yyvsp[-2].node)); freeAST((yyvsp[0].node));} else {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}}
-#line 1396 "src/parser/parser.c"
+#line 86 "src/parser/parser.y"
+                                                                {if ((yyvsp[-2].node)->nodeType == ST_CST && (yyvsp[0].node)->nodeType == ST_CST){(yyval.node) = newASTConstant((yyvsp[-2].node)->data.value + (yyvsp[0].node)->data.value); freeAST((yyvsp[-2].node)); freeAST((yyvsp[-1].node)); freeAST((yyvsp[0].node));} else {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}}
+#line 1264 "src/parser/parser.c"
     break;
 
   case 22: /* expr: expr PO_SUB expr  */
-#line 88 "src/parser/parser.y"
-                                                                {if ((yyvsp[-2].node)->nodeType == ST_CST && (yyvsp[0].node)->nodeType == ST_CST){(yyval.node) = newASTConstant((yyvsp[-2].node)->data.value - (yyvsp[0].node)->data.value); freeAST((yyvsp[-2].node)); freeAST((yyvsp[0].node));} else {if ((yyvsp[0].node)->nodeType == ST_CST) {freeAST((yyvsp[-1].node)); (yyval.node) = newASTOperator(SO_ADD); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), newASTConstant(- (yyvsp[0].node)->data.value)); freeAST((yyvsp[0].node));} else {addChildASTNode((yyval.node), (yyvsp[0].node));}}}
-#line 1402 "src/parser/parser.c"
+#line 87 "src/parser/parser.y"
+                                                                {if ((yyvsp[-2].node)->nodeType == ST_CST && (yyvsp[0].node)->nodeType == ST_CST){(yyval.node) = newASTConstant((yyvsp[-2].node)->data.value - (yyvsp[0].node)->data.value); freeAST((yyvsp[-2].node)); freeAST((yyvsp[-1].node)); freeAST((yyvsp[0].node));} else {if ((yyvsp[0].node)->nodeType == ST_CST) {freeAST((yyvsp[-1].node)); (yyval.node) = newASTOperator(SO_ADD); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), newASTConstant(- (yyvsp[0].node)->data.value)); freeAST((yyvsp[0].node));} else {addChildASTNode((yyval.node), (yyvsp[0].node));}}}
+#line 1270 "src/parser/parser.c"
     break;
 
   case 23: /* expr: expr PO_MUL expr  */
-#line 89 "src/parser/parser.y"
-                                                                {if ((yyvsp[-2].node)->nodeType == ST_CST && (yyvsp[0].node)->nodeType == ST_CST){(yyval.node) = newASTConstant((yyvsp[-2].node)->data.value * (yyvsp[0].node)->data.value); freeAST((yyvsp[-2].node)); freeAST((yyvsp[0].node));} else {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}}
-#line 1408 "src/parser/parser.c"
+#line 88 "src/parser/parser.y"
+                                                                {if ((yyvsp[-2].node)->nodeType == ST_CST && (yyvsp[0].node)->nodeType == ST_CST){(yyval.node) = newASTConstant((yyvsp[-2].node)->data.value * (yyvsp[0].node)->data.value); freeAST((yyvsp[-2].node)); freeAST((yyvsp[-1].node)); freeAST((yyvsp[0].node));} else {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}}
+#line 1276 "src/parser/parser.c"
     break;
 
   case 24: /* expr: expr PO_DIV expr  */
-#line 90 "src/parser/parser.y"
-                                                                {if ((yyvsp[-2].node)->nodeType == ST_CST && (yyvsp[0].node)->nodeType == ST_CST){(yyval.node) = newASTConstant((yyvsp[-2].node)->data.value / (yyvsp[0].node)->data.value); freeAST((yyvsp[-2].node)); freeAST((yyvsp[0].node));} else {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}}
-#line 1414 "src/parser/parser.c"
+#line 89 "src/parser/parser.y"
+                                                                {if ((yyvsp[-2].node)->nodeType == ST_CST && (yyvsp[0].node)->nodeType == ST_CST){(yyval.node) = newASTConstant((yyvsp[-2].node)->data.value / (yyvsp[0].node)->data.value); freeAST((yyvsp[-2].node)); freeAST((yyvsp[-1].node)); freeAST((yyvsp[0].node));} else {(yyval.node) = (yyvsp[-1].node); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}}
+#line 1282 "src/parser/parser.c"
     break;
 
   case 25: /* expr: LEFT_BRACKET expr RIGHT_BRACKET  */
-#line 91 "src/parser/parser.y"
+#line 90 "src/parser/parser.y"
                                                 {(yyval.node) = (yyvsp[-1].node);}
-#line 1420 "src/parser/parser.c"
+#line 1288 "src/parser/parser.c"
     break;
 
   case 26: /* expr: CST  */
-#line 92 "src/parser/parser.y"
+#line 91 "src/parser/parser.y"
                                                                         {(yyval.node) = (yyvsp[0].node);}
-#line 1426 "src/parser/parser.c"
+#line 1294 "src/parser/parser.c"
     break;
 
   case 27: /* expr: IDT  */
-#line 93 "src/parser/parser.y"
-                                                                        {(yyval.node) = newASTVariable((yyvsp[0].identifier));}
-#line 1432 "src/parser/parser.c"
+#line 92 "src/parser/parser.y"
+                                                                        {(yyval.node) = newASTVariable((yyvsp[0].identifier)); free((yyvsp[0].identifier));}
+#line 1300 "src/parser/parser.c"
     break;
 
 
-#line 1436 "src/parser/parser.c"
+#line 1304 "src/parser/parser.c"
 
       default: break;
     }
@@ -1625,7 +1493,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 96 "src/parser/parser.y"
+#line 95 "src/parser/parser.y"
 
 
 int yyerror(ASTNode **root,  char *s) {

@@ -16,4 +16,6 @@ Context newContext(char *name, HashMap *symboles);
 
 void printContext(Context context);
 
+void freeContext(Context *context);
+
 #endif

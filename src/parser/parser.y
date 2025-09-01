@@ -45,8 +45,7 @@
 
 %type <node> expr program bool_expr context if_statement optional_if
 
-//%printer { fprintf(yyo, "%s", $$); } <identifier>
-%printer { printf("\n-=[ CURRENT AST ]=-\n"); printAST($$); printf("\n============================\n");} <node>
+%destructor { free($$); } <identifier>
 
 %start program
 
@@ -63,7 +62,7 @@ context:%empty						{$$ = newASTContext(NULL, newHashMap());}
 	;
 
 if_statement:
-	PB_IF bool_expr LEFT_BRACE context RIGHT_BRACE optional_if {$$ = newASTBranch(SB_IF); addChildASTNode($$, $2); addChildASTNode($$, $4); addChildASTNode($$, $6);}
+	PB_IF bool_expr LEFT_BRACE context RIGHT_BRACE optional_if		{$$ = newASTBranch(SB_IF); addChildASTNode($$, $2); addChildASTNode($$, $4); addChildASTNode($$, $6);}
 	;
 
 optional_if: %empty													{$$ = NULL;}
@@ -83,14 +82,14 @@ bool_expr:
 	;
 
 expr:
-	 IDT  PO_AFF expr					{$$ = $2; addChildASTNode($$, newASTVariable($1)); addChildASTNode($$, $3);}
-	|expr PO_ADD expr					{if ($1->nodeType == ST_CST && $3->nodeType == ST_CST){$$ = newASTConstant($1->data.value + $3->data.value); freeAST($1); freeAST($3);} else {$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}}
-	|expr PO_SUB expr					{if ($1->nodeType == ST_CST && $3->nodeType == ST_CST){$$ = newASTConstant($1->data.value - $3->data.value); freeAST($1); freeAST($3);} else {if ($3->nodeType == ST_CST) {freeAST($2); $$ = newASTOperator(SO_ADD); addChildASTNode($$, $1); addChildASTNode($$, newASTConstant(- $3->data.value)); freeAST($3);} else {addChildASTNode($$, $3);}}}
-	|expr PO_MUL expr					{if ($1->nodeType == ST_CST && $3->nodeType == ST_CST){$$ = newASTConstant($1->data.value * $3->data.value); freeAST($1); freeAST($3);} else {$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}}
-	|expr PO_DIV expr					{if ($1->nodeType == ST_CST && $3->nodeType == ST_CST){$$ = newASTConstant($1->data.value / $3->data.value); freeAST($1); freeAST($3);} else {$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}}
+	 IDT  PO_AFF expr					{$$ = $2; addChildASTNode($$, newASTVariable($1)); addChildASTNode($$, $3); free($1);}
+	|expr PO_ADD expr					{if ($1->nodeType == ST_CST && $3->nodeType == ST_CST){$$ = newASTConstant($1->data.value + $3->data.value); freeAST($1); freeAST($2); freeAST($3);} else {$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}}
+	|expr PO_SUB expr					{if ($1->nodeType == ST_CST && $3->nodeType == ST_CST){$$ = newASTConstant($1->data.value - $3->data.value); freeAST($1); freeAST($2); freeAST($3);} else {if ($3->nodeType == ST_CST) {freeAST($2); $$ = newASTOperator(SO_ADD); addChildASTNode($$, $1); addChildASTNode($$, newASTConstant(- $3->data.value)); freeAST($3);} else {addChildASTNode($$, $3);}}}
+	|expr PO_MUL expr					{if ($1->nodeType == ST_CST && $3->nodeType == ST_CST){$$ = newASTConstant($1->data.value * $3->data.value); freeAST($1); freeAST($2); freeAST($3);} else {$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}}
+	|expr PO_DIV expr					{if ($1->nodeType == ST_CST && $3->nodeType == ST_CST){$$ = newASTConstant($1->data.value / $3->data.value); freeAST($1); freeAST($2); freeAST($3);} else {$$ = $2; addChildASTNode($$, $1); addChildASTNode($$, $3);}}
 	|LEFT_BRACKET expr RIGHT_BRACKET	{$$ = $2;}
 	|CST								{$$ = $1;}
-	|IDT								{$$ = newASTVariable($1);}
+	|IDT								{$$ = newASTVariable($1); free($1);}
 	;
 
 %%

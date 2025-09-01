@@ -22,3 +22,10 @@ void printContext(Context context){
 	}
 	printf("\n-=-=-=-\n");
 }
+
+void freeContext(Context *context){
+	free(context->name);
+	freeHashMap(context->symboles);
+	context->name = NULL;
+	context->symboles = NULL;
+}
