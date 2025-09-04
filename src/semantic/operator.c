@@ -1,13 +1,13 @@
-#include "operator.h"
+#include "operator.h"	
 
-static char *operatorRepr[] = {"+", "-", "*", "/", "%", "<<", ">>", "=", "main", "(+)"};
+static const char *operatorRepr[] = {"+", "-", "*", "/", "%", "<<", ">>", "=", "==", ">", "<", ">=", "<=", "and", "or", "not"};
 
 void printOperator(Operator op){
 	if (op >= SO_UNKOWN){
-		printf("UNKNOWN OPERATOR");
+		printf("\n-=[ Operator ]=-\nUNKNOWN OPERATOR");
 		return;
 	}
-	printf("%s", operatorRepr[op]);
+	printf("\n-=[ Operator ]=-\n%s", operatorRepr[op]);
 }
 
 char *getOperatorRepr(Operator op){

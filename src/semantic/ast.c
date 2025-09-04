@@ -1,5 +1,12 @@
 #include "ast.h"
 
+/**
+ * @brief Create a new AST node with the given type and data.
+ *
+ * @param nodeType Type of the AST node
+ * @param data Data associated with the node
+ * @return Pointer to the newly created ASTNode
+ */
 ASTNode *newASTNode(NodeType nodeType, Data data){
 	ASTNode *node = (ASTNode *)allocate(sizeof(ASTNode), "Allocating new ASTNode");
 	
@@ -8,48 +15,83 @@ ASTNode *newASTNode(NodeType nodeType, Data data){
 	node->sizeAllocated = 0;
 	node->childCount = 0;
 	node->child = NULL;
-	debug("Creating node");
-	printASTNode(node);
+	node->parent = NULL;
 	
 	return node;
 }
 
+/**
+ * @brief Creates a new AST context node. (e.g., function or block)
+ *
+ * @param name Name of the context (function name or NULL for anonymous)
+ * @param symboles Symbol table associated with the context
+ * @return Pointer to the newly created ASTNode representing the context
+ */
+ASTNode *newASTContext(char *name, HashMap *symboles){
+	Data data = NEW_EMPTY_DATA();
+	data.context = newContext(name, symboles);
+	return newASTNode(ST_CTX, data);
+}
+
+/**
+ * @brief Creates a new AST branch node (conditional/branch).
+ *
+ * @return Pointer to the newly created ASTNode representing a branch.
+ */
+ASTNode *newASTBranch(BranchType branchType){
+	Data data = NEW_EMPTY_DATA();
+	data.branchType = branchType;
+	return newASTNode(ST_BCH, data);
+}
+
+/**
+ * @brief Creates a new AST operator node.
+ *
+ * @param op Operator to associate with the node.
+ * @return Pointer to the newly created ASTNode representing an operator.
+ */
 ASTNode *newASTOperator(Operator op){
-	Data data;
+	Data data = NEW_EMPTY_DATA();
 	data.operator = op;
 	return newASTNode(ST_OPE, data);
 }
 
+/**
+ * @brief Creates a new AST constant node.
+ *
+ * @param constant Constant value to store in the node.
+ * @return Pointer to the newly created ASTNode representing a constant.
+ */
 ASTNode *newASTConstant(uint64_t constant){
-	Data data;
+	Data data = NEW_EMPTY_DATA();
 	data.value = constant;
 	return newASTNode(ST_CST, data);
 }
 
+/**
+ * @brief Creates a new AST variable node.
+ *
+ * @param varName Name of the variable.
+ * @return Pointer to the newly created ASTNode representing a variable.
+ */
 ASTNode *newASTVariable(char *varName){
-	Data data;
+	Data data = NEW_EMPTY_DATA();
 	Variable v = newVariable(varName, NEW_INT(), false, 0);
 	data.variable = v;
 	return newASTNode(ST_VAR, data);
 }
 
-ASTNode *newASTSymbolesTable(HashMap *symboleTable){
-	Data data;
-	data.symboles = symboleTable;
-	return newASTNode(ST_CTX, data);
-}
-
 int8_t allocateChild(ASTNode *node){
-	if (!node || !node->childCount + 1 < node->sizeAllocated){
+	if (!node || node->childCount + 1 < node->sizeAllocated){
 		return 0;
 	}
 
 	uint64_t sizeToAlloc = 0;
 	ASTNode **newASTNode = NULL;
-	if (node->childCount == 0){
+	if (node->sizeAllocated == 0){
 		sizeToAlloc = 1;
 	} else {
-		sizeToAlloc = 2 * node->childCount;
+		sizeToAlloc = 2 * node->sizeAllocated;
 	}
 
 	newASTNode = (ASTNode **)realloc(node->child, sizeToAlloc * sizeof(ASTNode *));
@@ -62,7 +104,67 @@ int8_t allocateChild(ASTNode *node){
 	return 0;
 }
 
-void popChildASTNode(ASTNode *root){
+void freeASTNode(ASTNode *node){
+	if (!node){
+		return;
+	}
+
+	switch (node->nodeType){
+	case ST_VAR:
+		free(GET_VARIABLE_NAME(node));
+		break;
+
+	case ST_CST:
+	case ST_OPE:
+	case ST_BCH:
+		break;
+
+	case ST_CTX:
+		freeContext(&(GET_CONTEXT(node)));
+		break;
+
+	default:
+		break;
+	}
+}
+
+void freeAST(ASTNode *node){
+	if (!node){
+		return;
+	}
+
+	for (uint64_t i = 0; i < node->childCount; i++){
+		freeAST(node->child[i]);
+	}
+
+	freeASTNode(node);
+	free(node->child);
+	free(node);
+}
+
+
+ASTNode *popChildASTNode(ASTNode *root){
+	if (!root){
+		fatalError("Cannot remove child in empty AST\n", -1);
+	}
+
+	if (root->childCount <= 0){
+		fatalError("No child to pop\n", -1);
+	}
+
+	root->childCount--;
+	ASTNode *node = root->child[root->childCount];
+	root->child[root->childCount] = NULL;
+	node->parent = NULL;
+	return node;
+}
+
+/**
+ * @brief Removes and frees the last added child node from the given AST node.
+ *
+ * @param root Pointer to the ASTNode from which to pop the child.
+ */
+void removeChildASTNode(ASTNode *root){
 	if (!root){
 		fatalError("Cannot pop empty AST\n", -1);
 	}
@@ -76,6 +178,13 @@ void popChildASTNode(ASTNode *root){
 	root->child[root->childCount] = NULL;
 }
 
+
+/**
+ * @brief Adds a child node to the given AST node.
+ *
+ * @param root Pointer to the parent ASTNode.
+ * @param child Pointer to the child ASTNode to add.
+ */
 void addChildASTNode(ASTNode *root, ASTNode *child){
 	if (!root || !child){
 		return;
@@ -86,9 +195,53 @@ void addChildASTNode(ASTNode *root, ASTNode *child){
 	}
 
 	root->child[root->childCount] = child;
+	child->parent				  = root;
 	root->childCount++;
 }
 
+void squachIfStatementRec(ASTNode *ifNode, ASTNode *root){
+	if (!root || root->nodeType != ST_BCH){
+		printf("NO NO NO NO NO\n");
+		return;
+	}
+
+	ASTNode *node = NULL;
+	switch (GET_BRANCH_TYPE(root)){
+	case SB_IF:
+		for (uint64_t i = 0; i < root->childCount; i++){
+			if (root->child[i]->nodeType == ST_BCH){
+				node = popChildASTNode(root);
+				squachIfStatementRec(ifNode, node);
+				freeASTNode(node);
+			}
+		}
+		break;
+	case SB_ELIF:
+		for (uint64_t i = 0; i < root->childCount; i++){
+			if (root->child[i]->nodeType == ST_BCH){
+				squachIfStatementRec(ifNode, root->child[i]);
+				freeASTNode(root->child[i]);
+			} else {
+				addChildASTNode(ifNode, root->child[i]);
+			}
+		}
+		break;
+
+	case SB_ELSE: 
+		for (uint64_t i = 0; i < root->childCount; i++){
+			addChildASTNode(ifNode, root->child[i]);
+		}
+		break;
+	}
+}
+
+void squachIfStatement(ASTNode *root){
+	if (!root || root->nodeType != ST_BCH || GET_BRANCH_TYPE(root) != SB_IF){
+		return;
+	}
+
+	squachIfStatementRec(root, root);
+}
 
 static char *nodeTypeRepr[] = {"Variable", "Constant", "Operator"};
 
@@ -105,69 +258,55 @@ void printASTNode(ASTNode *node){
 		return;
 	}
 
+	printf("Node at : 0x%lx\n", node);
 	switch (node->nodeType){
 	case ST_VAR:
-		if (node->data.variable.name){
-			printf("%s", node->data.variable.name);
-		} else {
-			printf("No Name");
-		}
+		printVariable(&(node->data.variable));
 		break;
 
 	case ST_CST:
-		printf("%lx", node->data.value);
+		printf("\n-=[ Constant ]=-\nvalue : %ld", GET_CONSTANT_VALUE(node) );
 		break;
 	
 	case ST_OPE:
-		printOperator(node->data.operator);
+		printOperator(GET_OPERATOR(node));
 		break;
 
 	case ST_CTX:
-		printHashMap(node->data.symboles);
+		printContext(node->data.context);
+		break;
+
+	case ST_BCH:
+		printf("\n-=[ Branch ]=-\nType : %ld\nChild count : %ld\n", GET_BRANCH_TYPE(node) ,node->childCount);
+
 		break;
 
 	default:
 		printf("Unknown value");
 		break;
 	}
+
+	if (node->childCount > 0) printf("child adresses : ");
+	for(uint64_t i = 0; i < node->childCount; i++){
+		printf("%lx ", node->child[i]);
+	}
+	if (node->childCount > 0) printf("\n");
+	printf("\n------------\n");
 }
 
+/**
+ * @brief Recursively prints the AST starting from the given root node.
+ *
+ * @param root Pointer to the root ASTNode.
+ */
 void printAST(ASTNode *root){
 	if (!root){
 		return;
 	}
 	
-	for (uint64_t i = 0; i < root->childCount / 2; i++){
+	printASTNode(root);
+
+	for (uint64_t i = 0; i < root->childCount ; i++){
 		printAST(root->child[i]);
-		if (root->nodeType == ST_CTX){
-			printf(";\n");
-		}
 	}
-
-	if (root->nodeType != ST_CTX){
-		printASTNode(root);
-	}
-
-	for (uint64_t i = root->childCount / 2; i < root->childCount ; i++){
-		printAST(root->child[i]);
-		if (root->nodeType == ST_CTX){
-			printf(";\n");
-		}
-	}
-}
-
-void freeAST(ASTNode *node){
-	if (!node){
-		return;
-	}
-
-	for (uint64_t i = 0; i < node->childCount; i++){
-		freeAST(node->child[i]);
-	}
-
-	if (node->nodeType == ST_VAR){
-		free(node->data.variable.name);
-	}
-	free(node->child);
-	free(node);
 }

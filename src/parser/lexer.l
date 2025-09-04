@@ -15,18 +15,18 @@ DIGIT [0-9]
 
 %%
 
-"//"	{BEGIN(COMMENTS);}
+"//"				{BEGIN(COMMENTS);}
 <COMMENTS>[^\n]*	{/* skip */}
-<COMMENTS>\n	{BEGIN(INITIAL);}
+<COMMENTS>\n		{BEGIN(INITIAL);}
 
 
-"/*"	{BEGIN(MULTILINE_COMMENTS);}
+"/*"						{BEGIN(MULTILINE_COMMENTS);}
 <MULTILINE_COMMENTS>"*/"	{BEGIN(INITIAL);}
-<MULTILINE_COMMENTS>\n	{yylineno++;}
-<MULTILINE_COMMENTS>.	{/* skip */}
+<MULTILINE_COMMENTS>\n		{yylineno++;}
+<MULTILINE_COMMENTS>.
 
 
--?[0-9]+	{yylval.node = newASTConstant(strtoul(yytext, NULL, 0)); return CST;}
+-?{DIGIT}+	{yylval.node = newASTConstant(strtoul(yytext, NULL, 0)); return CST;}
  
 
 "="			{yylval.node = newASTOperator(SO_AFF); return PO_AFF;}
@@ -45,10 +45,15 @@ DIGIT [0-9]
 "or"|"||"	{yylval.node = newASTOperator(SO_OR);  return PB_OR; }
 "not"|"!"	{yylval.node = newASTOperator(SO_NOT); return PB_NOT;}
 
+"if"		{return PB_IF;  }
+"elif"		{return PB_ELIF;}
+"else"		{return PB_ELSE; return PB_ELSE;}
 
 ";"			{return SEMICOLON;}
-"("			{return LB;}
-")"			{return RB;}
+"("			{return LEFT_BRACKET;}
+")"			{return RIGHT_BRACKET;}
+"{"			{return LEFT_BRACE;}
+"}"			{return RIGHT_BRACE;}
 
 [\t\n\r ]*
 [a-zA-Z]+	{yylval.identifier = strdup(yytext) ; return IDT;}

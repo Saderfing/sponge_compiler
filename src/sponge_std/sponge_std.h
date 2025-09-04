@@ -6,7 +6,6 @@
 #include <stdint.h>
 #include <string.h>
 #include "sponge_IO.h"
-#include "sponge_testing.h"
 
 extern int memUsage;
 

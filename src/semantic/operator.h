@@ -29,6 +29,8 @@ typedef enum {
 	SO_OPERATOR_COUNT
 } Operator;
 
+#define NEW_EMPTY_OPERATOR() SO_UNKOWN
+
 void printOperator(Operator op);
 
 char *getOperatorRepr(Operator op);

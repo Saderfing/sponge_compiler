@@ -4,15 +4,21 @@ INCDIR   = $(wildcard $(SRCDIR)/*/)
 PARDIR   = $(SRCDIR)/parser
 OBJDIR   = obj
 BINDIR   = bin
+# Files
+LEXFILE  = $(wildcard $(PARDIR)/*.l)
+PARFILE  = $(wildcard $(PARDIR)/*.y)
+
+LEXBUILD = $(LEXFILE:%.l=%.c)
+PARBUILD = $(PARFILE:%.y=%.c)
 
 # Build modes
-CC       = clang
+CC       = gcc
 CPPFLAGS = $(INCDIR:%=-I%)
 CFLAGS   = -Wall -Wextra
 LDFLAGS  = -ll -lm  # (libs includes always at the end)
 
 LEX      = flex
-LFLAGS   = -Cf
+LFLAGS   = -Cf --header-file=$(LEXFILE:%.l=%.h)
 
 YACC     = bison
 YFLAGS   = --header=$(PARFILE:%.y=%.h) -Wall
@@ -31,12 +37,6 @@ else
 PRG      = $(SRCDIR)/sc.c
 endif
 
-# Files
-LEXFILE  = $(wildcard $(PARDIR)/*.l)
-PARFILE  = $(wildcard $(PARDIR)/*.y)
-
-LEXBUILD = $(LEXFILE:%.l=%.c)
-PARBUILD = $(PARFILE:%.y=%.c)
 
 SRC      = $(LEXBUILD) $(PARBUILD) $(wildcard $(SRCDIR)/*/*.c) $(PRG)
 INC      = $(wildcard $(SRCDIR)/*.h) $(wildcard $(SRCDIR)/*/*.h)
