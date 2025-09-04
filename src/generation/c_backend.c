@@ -1,7 +1,7 @@
 #include "c_backend.h"
 
 char *getCReprOperator(Operator op){
-	static const char *COperatorRepr[] = {"+", "-", "*", "/", "%", "<<", ">>", "=", "==", ">", "<", ">=", "<=", "&&", "||", "!"};
+	static const char *COperatorRepr[] = {"+", "-", "*", "/", "%", "<<", ">>", "=", "==", ">", "<", ">=", "<=", "!=", "&&", "||", "!"};
 
 	if (op >= SO_UNKOWN){
 		fatalError("Unsupported operator for C\n", -1);
@@ -11,6 +11,14 @@ char *getCReprOperator(Operator op){
 }
 
 #define CONDITIONNAL_PREFIX(index) (index <= 1) ? "if" : "else if"
+
+#define WRITE_IN_PARENTHESIS(child, depth, outputFile) fprintf(outputFile, "(");						\
+												generateCCodeRec(child, depth, outputFile);	\
+												fprintf(outputFile, ")")
+
+#define WRITE_IN_CONTEXT(child, depth, outputFile)	fprintf(outputFile, "{\n");						\
+											generateCCodeRec(child, depth, outputFile);	\
+											fprintf(outputFile, "}")
 
 
 void generateCCodeRec(ASTNode *root, uint64_t depth, FILE* outputFile){
@@ -68,16 +76,10 @@ void generateCCodeRec(ASTNode *root, uint64_t depth, FILE* outputFile){
 		
 		switch (GET_BRANCH_TYPE(root) ){
 			case SB_IF: 
-				
 				for (uint64_t i = 0; i < root->childCount - (root->childCount % 2); i += 2){
 					fprintf(outputFile, CONDITIONNAL_PREFIX(i));
-					
-					fprintf(outputFile, "(");
-					generateCCodeRec(root->child[i], depth, outputFile);
-					fprintf(outputFile, ")");
-					fprintf(outputFile, "{\n\t");
-					generateCCodeRec(root->child[i + 1], depth + 1, outputFile);
-					fprintf(outputFile, "}");
+					WRITE_IN_PARENTHESIS(root->child[i], depth, outputFile);
+					WRITE_IN_CONTEXT(root->child[i + 1], depth + 1, outputFile);
 				}
 				
 				if ((root->childCount % 2) == 1){
@@ -94,8 +96,18 @@ void generateCCodeRec(ASTNode *root, uint64_t depth, FILE* outputFile){
 				fatalError("Unknown branch type for C code generation\n", -1);
 				break;
 
-			default:
+			
+			case SB_WHILE:
+				fprintf(outputFile, "while ");
+				WRITE_IN_PARENTHESIS(root->child[0], depth, outputFile);
+				WRITE_IN_CONTEXT(root->child[1], depth + 1, outputFile);
+
 				break;
+			
+			default:
+				fatalError("Unknown branch type for C code generation\n", -1);
+				break;
+
 		}
 		break;
 
