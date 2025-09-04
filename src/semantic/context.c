@@ -20,7 +20,6 @@ void printContext(Context context){
 	if (context.symboles){
 		printHashMap(context.symboles);
 	}
-	printf("\n-=-=-=-\n");
 }
 
 void freeContext(Context *context){

@@ -62,7 +62,7 @@ context:%empty						{$$ = newASTContext(NULL, newHashMap());}
 	;
 
 if_statement:
-	PB_IF bool_expr LEFT_BRACE context RIGHT_BRACE optional_if		{$$ = newASTBranch(SB_IF); addChildASTNode($$, $2); addChildASTNode($$, $4); addChildASTNode($$, $6);}
+	PB_IF bool_expr LEFT_BRACE context RIGHT_BRACE optional_if		{$$ = newASTBranch(SB_IF); addChildASTNode($$, $2); addChildASTNode($$, $4); addChildASTNode($$, $6); squachIfStatement($$);}
 	;
 
 optional_if: %empty													{$$ = NULL;}

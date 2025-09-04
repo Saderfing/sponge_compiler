@@ -29,7 +29,7 @@ InstructionName operatorToInstruction(Operator op){
 // void handleOperatorNode(ASTNode *node, InstStream *is){
 // 	Instruction inst;
 // 	emptyInstruction(&inst);
-// 	InstructionName isName = operatorToInstruction(node->data.operator);
+// 	InstructionName isName = operatorToInstruction(GET_VARIABLE_NAME(node));
 // }
 
 
@@ -48,8 +48,8 @@ InstructionName operatorToInstruction(Operator op){
 
 // 	case ST_CST:
 // 		char name[10];
-// 		snprintf(name, 10, "%lu", node->data.value);
-// 		Variable v = newVariable(name, NEW_INT(), true, node->data.value);
+// 		snprintf(name, 10, "%lu", GET_CONSTANT_VALUE(node) );
+// 		Variable v = newVariable(name, NEW_INT(), true, GET_CONSTANT_VALUE(node) );
 // 		Instruction instr = newInstruction(SI_MOV, name, );
 
 // 		return;

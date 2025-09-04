@@ -31,6 +31,21 @@ typedef union ast{
 	BranchType branchType;	// nodeType == ST_BCH
 } Data;
 
+#define GET_VARIABLE(node)            node->data.variable
+#define GET_VARIABLE_NAME(node)       node->data.variable.name
+#define GET_VARIABLE_TYPE(type)       node->data.variable.type
+#define GET_VARIABLE_DEFINED(defined) node->data.variable.defined
+
+#define GET_CONTEXT(node)         node->data.context
+#define GET_CONTEXT_NAME(node)    node->data.context.name
+#define GET_CONTEXT_SYMBOLE(node) node->data.context.symboles
+
+#define GET_OPERATOR(node)  node->data.operator
+
+#define GET_CONSTANT_VALUE(node) node->data.value
+
+#define GET_BRANCH_TYPE(node)    node->data.branchType
+
 typedef struct node{
 	NodeType nodeType; 	// Type of the node
 	Data data;			// Optional data associated with the node
@@ -56,7 +71,9 @@ ASTNode *newASTVariable(char *varNam);
 
 void addChildASTNode(ASTNode *root, ASTNode *child);
 
-void popChildASTNode(ASTNode *root);
+void removeChildASTNode(ASTNode *root);
+
+void squachIfStatement(ASTNode *root);
 
 void printASTNode(ASTNode *node);
 

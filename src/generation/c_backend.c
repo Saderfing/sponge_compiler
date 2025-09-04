@@ -10,6 +10,8 @@ char *getCReprOperator(Operator op){
 	return COperatorRepr[op];
 }
 
+#define CONDITIONNAL_PREFIX(index) (index <= 1) ? "if" : "else if"
+
 
 void generateCCodeRec(ASTNode *root, uint64_t depth, FILE* outputFile){
 	if (!root){
@@ -19,25 +21,25 @@ void generateCCodeRec(ASTNode *root, uint64_t depth, FILE* outputFile){
 
 	switch (root->nodeType){
 	case ST_VAR:
-		printf("Generating C code for variable: %s\n", root->data.variable.name);
-		if (root->data.variable.name){
-			fprintf(outputFile, "var_%s", root->data.variable.name);
+		printf("Generating C code for variable: %s\n", GET_VARIABLE_NAME(root));
+		if (GET_VARIABLE_NAME(root)){
+			fprintf(outputFile, "var_%s", GET_VARIABLE_NAME(root));
 		}
 		break;
 
 	case ST_CST:
-		printf("Generating C code for constant: %lu\n", root->data.value);
-		fprintf(outputFile, "%ld", root->data.value);
+		printf("Generating C code for constant: %lu\n", GET_CONSTANT_VALUE(root) );
+		fprintf(outputFile, "%ld", GET_CONSTANT_VALUE(root) );
 		break;
 	
 	case ST_OPE:
-		printf("Generating C code for operator: %s\n", getCReprOperator(root->data.operator));
-		if (root->data.operator == SO_AFF){
+		printf("Generating C code for operator: %s\n", getCReprOperator(GET_OPERATOR(root)));
+		if (GET_OPERATOR(root) == SO_AFF){
 			fprintf(outputFile, "int ");
 		}
 
 		generateCCodeRec(root->child[0], 0, outputFile);
-		fprintf(outputFile, " %s ", getCReprOperator(root->data.operator));
+		fprintf(outputFile, " %s ", getCReprOperator(GET_OPERATOR(root)));
 		generateCCodeRec(root->child[1], 0, outputFile);
 
 		break;
@@ -45,7 +47,7 @@ void generateCCodeRec(ASTNode *root, uint64_t depth, FILE* outputFile){
 	case ST_CTX:
 		printf("Generating C code for context\n%lu\n", root->childCount);
 
-		if (root->parent == NULL && root->data.context.name == NULL){
+		if (root->parent == NULL && GET_CONTEXT_NAME(root) == NULL){
 			fprintf(outputFile, "int main(int argc, char *argv[]){\n\t");
 			for (uint64_t i = 0; i < root->childCount; i++){
 				generateCCodeRec(root->child[i], depth, outputFile);
@@ -64,53 +66,37 @@ void generateCCodeRec(ASTNode *root, uint64_t depth, FILE* outputFile){
 	case ST_BCH:
 		printf("Generating C code for branch\n%lu\n", root->childCount);
 		
-		switch (root->data.branchType){
-			case SB_IF  : 
-				fprintf(outputFile, "if ");
-				for (uint64_t i = 0; i < root->childCount; i++){
-					if (root->child[i]->nodeType == ST_OPE){
-						fprintf(outputFile, "(");
-						generateCCodeRec(root->child[i], depth, outputFile);
-						fprintf(outputFile, ")");
-					} else if (root->child[i]->nodeType == ST_CTX){
-						fprintf(outputFile, "{\n\t");
-						generateCCodeRec(root->child[i], depth + 1, outputFile);
-						fprintf(outputFile, "}");
-					} else {
-						generateCCodeRec(root->child[i], depth, outputFile);
-					}
+		switch (GET_BRANCH_TYPE(root) ){
+			case SB_IF: 
+				
+				for (uint64_t i = 0; i < root->childCount - (root->childCount % 2); i += 2){
+					fprintf(outputFile, CONDITIONNAL_PREFIX(i));
+					
+					fprintf(outputFile, "(");
+					generateCCodeRec(root->child[i], depth, outputFile);
+					fprintf(outputFile, ")");
+					fprintf(outputFile, "{\n\t");
+					generateCCodeRec(root->child[i + 1], depth + 1, outputFile);
+					fprintf(outputFile, "}");
 				}
+				
+				if ((root->childCount % 2) == 1){
+					fprintf(outputFile, "else");
+					fprintf(outputFile, "{\n\t");
+					generateCCodeRec(root->child[root->childCount - 1], depth + 1, outputFile);
+					fprintf(outputFile, "}");
+				}
+
 				break;
 
 			case SB_ELIF:
-				fprintf(outputFile, "else if ");
-				for (uint64_t i = 0; i < root->childCount; i++){
-					if (root->child[i]->nodeType == ST_OPE){
-						fprintf(outputFile, "(");
-						generateCCodeRec(root->child[i], depth, outputFile);
-						fprintf(outputFile, ")");
-					} else if (root->child[i]->nodeType == ST_CTX){
-						fprintf(outputFile, "{\n\t");
-						generateCCodeRec(root->child[i], depth + 1, outputFile);
-						fprintf(outputFile, "}");
-					} else {
-						generateCCodeRec(root->child[i], depth, outputFile);
-					}
-				}
-				break;
-
 			case SB_ELSE:
-				fprintf(outputFile, "else ");
-				for (uint64_t i = 0; i < root->childCount; i++){
-					fprintf(outputFile, "{\n\t");
-					generateCCodeRec(root->child[i], depth + 1, outputFile);
-					fprintf(outputFile, "}");
-				}
+				fatalError("Unknown branch type for C code generation\n", -1);
 				break;
 
-			default: fatalError("Unsupported branch type\n", -1);
+			default:
+				break;
 		}
-
 		break;
 
 	default:

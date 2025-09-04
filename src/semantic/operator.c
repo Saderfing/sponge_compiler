@@ -4,10 +4,10 @@ static const char *operatorRepr[] = {"+", "-", "*", "/", "%", "<<", ">>", "=", "
 
 void printOperator(Operator op){
 	if (op >= SO_UNKOWN){
-		printf("\n-=[ Operator ]=-\nUNKNOWN OPERATOR\n-------------\n");
+		printf("\n-=[ Operator ]=-\nUNKNOWN OPERATOR");
 		return;
 	}
-	printf("\n-=[ Operator ]=-\n%s\n-------------\n", operatorRepr[op]);
+	printf("\n-=[ Operator ]=-\n%s", operatorRepr[op]);
 }
 
 char *getOperatorRepr(Operator op){

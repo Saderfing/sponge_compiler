@@ -31,5 +31,4 @@ void setVariableName(char *name, Variable v){
 void printVariable(Variable *var){
 	printf("\n-=[ Variable ]=-\n name : %s\n", var->name);
 	printType(var->type);
-	printf("\n-----------\n");
 }

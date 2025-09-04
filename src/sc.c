@@ -16,7 +16,7 @@ void buildSymboleTableRec(ASTNode *root, HashMap *currentSymboleTable){
 
 	switch (root->nodeType){
 	case ST_VAR:
-		appendHashMap(root->data.variable.name, 0, currentSymboleTable);
+		appendHashMap(GET_VARIABLE_NAME(root), 0, currentSymboleTable);
 		return;
 	
 	case ST_CTX:
@@ -69,6 +69,8 @@ int main(int argc, char *argv[]){
 	buildSymboleTable(root);
 
 	selectOptimization(root);
+	
+	printAST(root);
 
 	FILE *f = openFile("a.c", "w");
 	selectBackend(root, BACKEND_C, f);

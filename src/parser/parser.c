@@ -1175,7 +1175,7 @@ yyreduce:
 
   case 7: /* if_statement: PB_IF bool_expr LEFT_BRACE context RIGHT_BRACE optional_if  */
 #line 65 "src/parser/parser.y"
-                                                                                {(yyval.node) = newASTBranch(SB_IF); addChildASTNode((yyval.node), (yyvsp[-4].node)); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node));}
+                                                                                {(yyval.node) = newASTBranch(SB_IF); addChildASTNode((yyval.node), (yyvsp[-4].node)); addChildASTNode((yyval.node), (yyvsp[-2].node)); addChildASTNode((yyval.node), (yyvsp[0].node)); squachIfStatement((yyval.node));}
 #line 1180 "src/parser/parser.c"
     break;
 

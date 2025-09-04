@@ -104,12 +104,67 @@ int8_t allocateChild(ASTNode *node){
 	return 0;
 }
 
+void freeASTNode(ASTNode *node){
+	if (!node){
+		return;
+	}
+
+	switch (node->nodeType){
+	case ST_VAR:
+		free(GET_VARIABLE_NAME(node));
+		break;
+
+	case ST_CST:
+	case ST_OPE:
+	case ST_BCH:
+		break;
+
+	case ST_CTX:
+		freeContext(&(GET_CONTEXT(node)));
+		break;
+
+	default:
+		break;
+	}
+}
+
+void freeAST(ASTNode *node){
+	if (!node){
+		return;
+	}
+
+	for (uint64_t i = 0; i < node->childCount; i++){
+		freeAST(node->child[i]);
+	}
+
+	freeASTNode(node);
+	free(node->child);
+	free(node);
+}
+
+
+ASTNode *popChildASTNode(ASTNode *root){
+	if (!root){
+		fatalError("Cannot remove child in empty AST\n", -1);
+	}
+
+	if (root->childCount <= 0){
+		fatalError("No child to pop\n", -1);
+	}
+
+	root->childCount--;
+	ASTNode *node = root->child[root->childCount];
+	root->child[root->childCount] = NULL;
+	node->parent = NULL;
+	return node;
+}
+
 /**
  * @brief Removes and frees the last added child node from the given AST node.
  *
  * @param root Pointer to the ASTNode from which to pop the child.
  */
-void popChildASTNode(ASTNode *root){
+void removeChildASTNode(ASTNode *root){
 	if (!root){
 		fatalError("Cannot pop empty AST\n", -1);
 	}
@@ -122,6 +177,7 @@ void popChildASTNode(ASTNode *root){
 	freeAST(root->child[root->childCount]);
 	root->child[root->childCount] = NULL;
 }
+
 
 /**
  * @brief Adds a child node to the given AST node.
@@ -143,16 +199,48 @@ void addChildASTNode(ASTNode *root, ASTNode *child){
 	root->childCount++;
 }
 
-void squachIfStatements(ASTNode *ifNode, ASTNode *root){
-	if (!root){
+void squachIfStatementRec(ASTNode *ifNode, ASTNode *root){
+	if (!root || root->nodeType != ST_BCH){
+		printf("NO NO NO NO NO\n");
 		return;
 	}
 
-	if (root->nodeType == ST_BCH){
+	ASTNode *node = NULL;
+	switch (GET_BRANCH_TYPE(root)){
+	case SB_IF:
 		for (uint64_t i = 0; i < root->childCount; i++){
-			
+			if (root->child[i]->nodeType == ST_BCH){
+				node = popChildASTNode(root);
+				squachIfStatementRec(ifNode, node);
+				freeASTNode(node);
+			}
 		}
+		break;
+	case SB_ELIF:
+		for (uint64_t i = 0; i < root->childCount; i++){
+			if (root->child[i]->nodeType == ST_BCH){
+				squachIfStatementRec(ifNode, root->child[i]);
+				freeASTNode(root->child[i]);
+			} else {
+				addChildASTNode(ifNode, root->child[i]);
+			}
+		}
+		break;
+
+	case SB_ELSE: 
+		for (uint64_t i = 0; i < root->childCount; i++){
+			addChildASTNode(ifNode, root->child[i]);
+		}
+		break;
 	}
+}
+
+void squachIfStatement(ASTNode *root){
+	if (!root || root->nodeType != ST_BCH || GET_BRANCH_TYPE(root) != SB_IF){
+		return;
+	}
+
+	squachIfStatementRec(root, root);
 }
 
 static char *nodeTypeRepr[] = {"Variable", "Constant", "Operator"};
@@ -170,17 +258,18 @@ void printASTNode(ASTNode *node){
 		return;
 	}
 
+	printf("Node at : 0x%lx\n", node);
 	switch (node->nodeType){
 	case ST_VAR:
 		printVariable(&(node->data.variable));
 		break;
 
 	case ST_CST:
-		printf("\n-=[ Constant ]=-\nvalue : %ld\n----------", node->data.value);
+		printf("\n-=[ Constant ]=-\nvalue : %ld", GET_CONSTANT_VALUE(node) );
 		break;
 	
 	case ST_OPE:
-		printOperator(node->data.operator);
+		printOperator(GET_OPERATOR(node));
 		break;
 
 	case ST_CTX:
@@ -188,7 +277,7 @@ void printASTNode(ASTNode *node){
 		break;
 
 	case ST_BCH:
-		printf("\n-=[ Branch ]=-\n%ld\n------------\n", node->childCount);
+		printf("\n-=[ Branch ]=-\nType : %ld\nChild count : %ld\n", GET_BRANCH_TYPE(node) ,node->childCount);
 
 		break;
 
@@ -196,6 +285,13 @@ void printASTNode(ASTNode *node){
 		printf("Unknown value");
 		break;
 	}
+
+	if (node->childCount > 0) printf("child adresses : ");
+	for(uint64_t i = 0; i < node->childCount; i++){
+		printf("%lx ", node->child[i]);
+	}
+	if (node->childCount > 0) printf("\n");
+	printf("\n------------\n");
 }
 
 /**
@@ -213,42 +309,4 @@ void printAST(ASTNode *root){
 	for (uint64_t i = 0; i < root->childCount ; i++){
 		printAST(root->child[i]);
 	}
-}
-
-void freeASTNode(ASTNode *node){
-	if (!node){
-		return;
-	}
-
-	switch (node->nodeType){
-	case ST_VAR:
-		free(node->data.variable.name);
-		break;
-
-	case ST_CST:
-	case ST_OPE:
-	case ST_BCH:
-		break;
-
-	case ST_CTX:
-		freeContext(&(node->data.context));
-		break;
-
-	default:
-		break;
-	}
-}
-
-void freeAST(ASTNode *node){
-	if (!node){
-		return;
-	}
-
-	for (uint64_t i = 0; i < node->childCount; i++){
-		freeAST(node->child[i]);
-	}
-
-	freeASTNode(node);
-	free(node->child);
-	free(node);
 }
