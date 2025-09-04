@@ -16,7 +16,7 @@ char *getCReprOperator(Operator op){
 												generateCCodeRec(child, depth, outputFile);	\
 												fprintf(outputFile, ")")
 
-#define WRITE_IN_CONTEXT(child, depth, outputFile)	fprintf(outputFile, "{");						\
+#define WRITE_IN_CONTEXT(child, depth, outputFile)	fprintf(outputFile, "{\n");						\
 											generateCCodeRec(child, depth, outputFile);	\
 											fprintf(outputFile, "}")
 

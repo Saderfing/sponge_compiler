@@ -35,11 +35,12 @@ DIGIT [0-9]
 "*"			{yylval.node = newASTOperator(SO_MUL); return PO_MUL;}
 "/"			{yylval.node = newASTOperator(SO_DIV); return PO_DIV;}
 
-"=="		{yylval.node = newASTOperator(SO_EQ);  return PR_EQ;}
-"<="		{yylval.node = newASTOperator(SO_LE);  return PR_LE;}
-">="		{yylval.node = newASTOperator(SO_GE);  return PR_GE;}
-"<"			{yylval.node = newASTOperator(SO_LT);  return PR_LT;}
-">"			{yylval.node = newASTOperator(SO_GT);  return PR_GT;}
+"=="		{yylval.node = newASTOperator(SO_EQ); return PR_EQ;}
+"<="		{yylval.node = newASTOperator(SO_LE); return PR_LE;}
+">="		{yylval.node = newASTOperator(SO_GE); return PR_GE;}
+"<"			{yylval.node = newASTOperator(SO_LT); return PR_LT;}
+">"			{yylval.node = newASTOperator(SO_GT); return PR_GT;}
+"!="		{yylval.node = newASTOperator(SO_NE); return PR_NE;}
 
 "and"|"&&"	{yylval.node = newASTOperator(SO_AND); return PB_AND;}
 "or"|"||"	{yylval.node = newASTOperator(SO_OR);  return PB_OR; }
@@ -48,6 +49,8 @@ DIGIT [0-9]
 "if"		{return PB_IF;  }
 "elif"		{return PB_ELIF;}
 "else"		{return PB_ELSE; return PB_ELSE;}
+
+"while"		{return PB_WHILE;}
 
 ";"			{return SEMICOLON;}
 "("			{return LEFT_BRACKET;}
