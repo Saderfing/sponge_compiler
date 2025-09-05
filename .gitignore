@@ -70,3 +70,4 @@ a.c
 *parser.c
 *parser.h
 *.svg
+docs/
